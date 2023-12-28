@@ -45,11 +45,7 @@
   y
 }
 
-descSummary <- function(x, ...) {
-  UseMethod("descSummary")
-}
-
-descSummary.default <- function(frame, ...) {
+.summarize <- function(frame) {
   if (typeof(frame) == "double") {
     data <- data.frame(frame)
     if (ncol(data) == 1) {
@@ -64,16 +60,29 @@ descSummary.default <- function(frame, ...) {
   Skew <- sapply(data, .skewness, na.rm = TRUE)
   Kurt <- sapply(data, .kurtosis, na.rm = TRUE)
   results <- cbind(N = N, M = M, SD = SD, Skew = Skew, Kurt = Kurt)
-  class(results) <- "wss"
   return(results)
 }
 
-descSummary.formula <- function(formula, ...) {
-  results <- aggregate(formula, FUN = descSummary)
+descSummary <- function(x, ...) {
+  UseMethod("descSummary")
+}
+
+descSummary.bss <- descSummary.wss <- function(frame, digits = 3, width = NULL, ...) {
+  return(frame)
+}
+
+descSummary.default <- function(frame, digits = 3, width = NULL, ...) {
+  out <- .summarize(frame)
+  class(out) <- "wss"
+  return(out)
+}
+
+descSummary.formula <- function(formula, digits=3, width=NULL, ...) {
+  results <- aggregate(formula, FUN = .summarize)
   rn <- results[, 1]
   results <- results[[2]]
   rownames(results) <- rn
   colnames(results) <- c("N", "M", "SD", "Skew", "Kurt")
-  class(results) <- "bss"
-  return(results)
+  class(out) <- "bss"
+  return(out)
 }
