@@ -1,24 +1,6 @@
 # Estimation Approach to Statistical Inference
 ## Formatting
 
-### Tables
-
-print.easi <- function (x, digits = 3, quote = FALSE, right = TRUE, width = NULL, trim = TRUE) {
-  if (is.null(width)) width <- digits + 4
-  m <- format(as.matrix(x),digits = digits, na.encode = FALSE, width = width, trim = trim, nsmall = digits)
-  print(m, quote = quote, right = right)
-}
-
-print.bss <- print.wss <- function(x, ..., digits = 3, quote = FALSE, right = TRUE, width = NULL, trim = TRUE) {
-  m <- unclass(x)
-  if (is.null(width)) width <- digits + 4
-  m <- format(as.matrix(m), digits = digits, na.encode = FALSE, width = width, trim = trim, nsmall = digits)
-  m <- list(m)
-  names(m) <- "Summary Statistics"
-  print(m, ..., quote = quote, right = right)
-  invisible(x)
-}
-
 ### Frames
 
 .formatFrame <- function(results, digits = 3, width = NULL) {
@@ -32,8 +14,8 @@ print.bss <- print.wss <- function(x, ..., digits = 3, quote = FALSE, right = TR
 
 ### Lists
 
-.formatList <- function(results, main = NULL, digits = 3) {
-  results <- lapply(results, .formatFrame, digits)
+.formatList <- function(results, main = NULL, digits = 3, width = NULL) {
+  results <- lapply(results, .formatFrame, digits, width)
   if (!is.null(main)) names(results) <- main
   results
 }
@@ -63,4 +45,24 @@ print.bss <- print.wss <- function(x, ..., digits = 3, quote = FALSE, right = TR
   out <- list(.deList(results))
   names(out) <- main
   return(out)
+}
+
+### Print
+
+print.bss <- print.wss <- function(x, ...) {
+  m <- list(unclass(x))
+  names(m) <- "Summary Statistics for the Data"
+  print(.formatList(m, ...))
+  invisible(x)
+}
+
+print.corr <- function(x, ...) {
+  m <- list(unclass(x))
+  names(m) <- "Correlations for the Data"
+  print(.formatList(m, ...))
+  invisible(x)
+}
+
+print.easi <- function(x, ...) {
+  print(.formatList(x, ...))
 }

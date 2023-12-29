@@ -7,7 +7,7 @@ estimateDifference <- function(x, ...) {
   UseMethod("estimateDifference")
 }
 
-estimateDifference.wss <- function(CompStats, CorrStats, mu = 0, conf.level = .95, digits = 3, width = NULL, ...) {
+estimateDifference.wss <- function(CompStats, CorrStats, mu = 0, conf.level = .95, ...) {
   CompStats <- CompStats[1:2,]
   N <- CompStats[, "N"]
   M <- CompStats[, "M"]
@@ -23,13 +23,13 @@ estimateDifference.wss <- function(CompStats, CorrStats, mu = 0, conf.level = .9
   UL <- Est + tcrit * SE
   results <- data.frame(Est, SE, df, LL, UL)
   rownames(results) <- "Comparison"
-  out <- .formatFrame(results, digits = digits, width = width)
-  out <- list(out)
+  out <- list(results)
   names(out) <- "Confidence Intervals for the Difference of Means"
+  class(out) <- c("easi", "list")
   return(out)
 }
 
-estimateDifference.bss <- function(CompStats, mu = 0, conf.level = .95, digits = 3, width = NULL, ...) {
+estimateDifference.bss <- function(CompStats, mu = 0, conf.level = .95, ...) {
   CompStats <- CompStats[1:2,]
   N <- CompStats[, "N"]
   M <- CompStats[, "M"]
@@ -42,8 +42,8 @@ estimateDifference.bss <- function(CompStats, mu = 0, conf.level = .95, digits =
   UL <- Est + tcrit * SE
   results <- data.frame(Est, SE, df, LL, UL)
   rownames(results) <- "Comparison"
-  out <- .formatFrame(results, digits = digits, width = width)
-  out <- list(out)
+  out <- list(results)
   names(out) <- "Confidence Intervals for the Difference of Means"
+  class(out) <- c("easi", "list")
   return(out)
 }

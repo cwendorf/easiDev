@@ -67,22 +67,22 @@ descSummary <- function(x, ...) {
   UseMethod("descSummary")
 }
 
-descSummary.bss <- descSummary.wss <- function(frame, digits = 3, width = NULL, ...) {
+descSummary.bss <- descSummary.wss <- function(frame, ...) {
   return(frame)
 }
 
-descSummary.default <- function(frame, digits = 3, width = NULL, ...) {
+descSummary.default <- function(frame, ...) {
   out <- .summarize(frame)
   class(out) <- "wss"
   return(out)
 }
 
-descSummary.formula <- function(formula, digits=3, width=NULL, ...) {
+descSummary.formula <- function(formula, ...) {
   results <- aggregate(formula, FUN = .summarize)
   rn <- results[, 1]
-  results <- results[[2]]
-  rownames(results) <- rn
-  colnames(results) <- c("N", "M", "SD", "Skew", "Kurt")
+  out <- results[[2]]
+  rownames(out) <- rn
+  colnames(out) <- c("N", "M", "SD", "Skew", "Kurt")
   class(out) <- "bss"
   return(out)
 }

@@ -11,6 +11,7 @@ estimateComparison.bss <- function(DescStats, conf.level = .95, mu = 0, ...) {
   Levels <- estimateMeans(DescStats, conf.level = conf.level, mu = 0, ...)
   Diff <- estimateDifference(DescStats, conf.level = conf.level, mu = 0, ...)
   out <- c(Levels, Diff)
+  class(out) <- c("easi", "list")
   return(out)
 }
 
@@ -18,6 +19,7 @@ estimateComparison.wss <- function(DescStats, CorrStats, conf.level = .95, mu = 
   Levels <- estimateMeans(DescStats, CorrStats, conf.level = conf.level, mu = 0, ...)
   Diff <- estimateDifference(DescStats, CorrStats, conf.level = conf.level, mu = 0, ...)
   out <- c(Levels, Diff)
+  class(out) <- c("easi", "list")
   return(out)
 }
 

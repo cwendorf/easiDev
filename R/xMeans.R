@@ -7,7 +7,7 @@ estimateMeans <- function(x, ...) {
   UseMethod("estimateMeans")
 }
 
-estimateMeans.wss <- estimateMeans.bss <- function(DescStats, mu = 0, conf.level = .95, digits = 3, width = NULL, ...) {
+estimateMeans.wss <- estimateMeans.bss <- function(DescStats, mu = 0, conf.level = .95, ...) {
   N <- DescStats[, "N"]
   M <- DescStats[, "M"]
   SD <- DescStats[, "SD"]
@@ -19,9 +19,9 @@ estimateMeans.wss <- estimateMeans.bss <- function(DescStats, mu = 0, conf.level
   UL <- Est + tcrit * SE
   results <- data.frame(Est, SE, df, LL, UL)
   rownames(results) <- rownames(DescStats)
-  out <- .formatFrame(results, digits = digits, width = width)
-  out <- list(out)
+  out <- list(results)
   names(out) <- "Confidence Intervals for the Means"
+  class(out) <- c("easi", "list")
   return(out)
 }
 
