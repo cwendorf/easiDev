@@ -4,14 +4,14 @@
 ### Construction
 
 construct <- function(..., class = "data") {
-  if (class == "bss" || class == "wss") {
+  if (class == "bsm" || class == "wsm") {
     out <- rbind(...)
     class(out) <- class
-    comment(out) <- "Summary Statistics"
+    comment(out) <- "Moments"
   } else if (class == "data") {
     out <- data.frame(...)
     comment(out) <- "Data"
-  } else if (class == "corr") {
+  } else if (class == "cor") {
     out <- rbind(...)
     colnames(out) <- rownames(out)
     class(out) <- class
@@ -26,7 +26,7 @@ focus <- function(x, ...) {
   UseMethod("focus")
 }
 
-focus.bss <- focus.wss <- function(DescStats, ...) {
+focus.bsm <- focus.wsm <- function(DescStats, ...) {
   chosen <- as.character(match.call(expand.dots = FALSE)$...)
   if (typeof(DescStats) == "list") {
     for (i in seq_along(DescStats)) {
@@ -68,7 +68,7 @@ focus.formula <- function(formula, ...) {
   update(formula, update)
 }
 
-focus.corr <- function(CorrStats, ...) {
+focus.cor <- function(CorrStats, ...) {
   chosen <- as.character(match.call(expand.dots = FALSE)$...)
   if (typeof(CorrStats) == "list") {
     for (i in seq_along(CorrStats)) {

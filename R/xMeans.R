@@ -7,7 +7,7 @@ estimateMeans <- function(x, ...) {
   UseMethod("estimateMeans")
 }
 
-estimateMeans.wss <- estimateMeans.bss <- function(DescStats, mu = 0, conf.level = .95, ...) {
+estimateMeans.wsm <- estimateMeans.bsm <- function(DescStats, mu = 0, conf.level = .95, ...) {
   N <- DescStats[, "N"]
   M <- DescStats[, "M"]
   SD <- DescStats[, "SD"]
@@ -31,13 +31,13 @@ plotMeans <- function(x, ...) {
   UseMethod("plotMeans")
 }
 
-plotMeans.wss <- function(..., mu = 0, conf.level = .95, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, pos = 2, pch = 16, col = "black", connect = TRUE, offset = 0, intervals = TRUE) {
+plotMeans.wsm <- function(..., mu = 0, conf.level = .95, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, pos = 2, pch = 16, col = "black", connect = TRUE, offset = 0, intervals = TRUE) {
   results <- estimateMeans(..., mu = mu, conf.level = conf.level, main = main, digits = digits)
   plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
   invisible(eval(...))
 }
 
-plotMeans.bss <- function(..., mu = 0, conf.level = .95, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, pos = 2, pch = 16, col = "black", connect = FALSE, offset = 0, intervals = TRUE) {
+plotMeans.bsm <- function(..., mu = 0, conf.level = .95, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, pos = 2, pch = 16, col = "black", connect = FALSE, offset = 0, intervals = TRUE) {
   results <- estimateMeans(..., mu = mu, conf.level = conf.level, main = main, digits = digits)
   plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
   invisible(eval(...))

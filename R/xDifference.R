@@ -7,7 +7,7 @@ estimateDifference <- function(x, ...) {
   UseMethod("estimateDifference")
 }
 
-estimateDifference.wss <- function(CompStats, CorrStats, mu = 0, conf.level = .95, ...) {
+estimateDifference.wsm <- function(CompStats, CorrStats, mu = 0, conf.level = .95, ...) {
   CompStats <- CompStats[1:2,]
   N <- CompStats[, "N"]
   M <- CompStats[, "M"]
@@ -29,7 +29,7 @@ estimateDifference.wss <- function(CompStats, CorrStats, mu = 0, conf.level = .9
   return(out)
 }
 
-estimateDifference.bss <- function(CompStats, mu = 0, conf.level = .95, ...) {
+estimateDifference.bsm <- function(CompStats, mu = 0, conf.level = .95, ...) {
   CompStats <- CompStats[1:2,]
   N <- CompStats[, "N"]
   M <- CompStats[, "M"]

@@ -63,26 +63,26 @@
   return(results)
 }
 
-descSummary <- function(x, ...) {
-  UseMethod("descSummary")
+describeMoments <- function(x, ...) {
+  UseMethod("describeMoments")
 }
 
-descSummary.bss <- descSummary.wss <- function(frame, ...) {
+describeMoments.bsm <- describeMoments.wsm <- function(frame, ...) {
   return(frame)
 }
 
-descSummary.default <- function(frame, ...) {
+describeMoments.default <- function(frame, ...) {
   out <- .summarize(frame)
-  class(out) <- "wss"
+  class(out) <- "wsm"
   return(out)
 }
 
-descSummary.formula <- function(formula, ...) {
+describeMoments.formula <- function(formula, ...) {
   results <- aggregate(formula, FUN = .summarize)
   rn <- results[, 1]
   out <- results[[2]]
   rownames(out) <- rn
   colnames(out) <- c("N", "M", "SD", "Skew", "Kurt")
-  class(out) <- "bss"
+  class(out) <- "bsm"
   return(out)
 }

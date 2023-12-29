@@ -49,14 +49,14 @@
 
 ### Print
 
-print.bss <- print.wss <- function(x, ...) {
+print.bsm <- print.wsm <- function(x, ...) {
   m <- list(unclass(x))
   names(m) <- "Summary Statistics for the Data"
   print(.formatList(m, ...))
   invisible(x)
 }
 
-print.corr <- function(x, ...) {
+print.cor <- function(x, ...) {
   m <- list(unclass(x))
   names(m) <- "Correlations for the Data"
   print(.formatList(m, ...))
