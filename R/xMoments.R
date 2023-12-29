@@ -71,18 +71,18 @@ describeMoments.bsm <- describeMoments.wsm <- function(frame, ...) {
   return(frame)
 }
 
-describeMoments.default <- function(frame, ...) {
-  out <- .summarize(frame)
-  class(out) <- "wsm"
-  return(out)
+describeMoments.data.frame <- function(frame, ...) {
+  output <- .summarize(frame)
+  class(output) <- "wsm"
+  return(output)
 }
 
 describeMoments.formula <- function(formula, ...) {
   results <- aggregate(formula, FUN = .summarize)
   rn <- results[, 1]
-  out <- results[[2]]
-  rownames(out) <- rn
-  colnames(out) <- c("N", "M", "SD", "Skew", "Kurt")
-  class(out) <- "bsm"
-  return(out)
+  output <- results[[2]]
+  rownames(output) <- rn
+  colnames(output) <- c("N", "M", "SD", "Skew", "Kurt")
+  class(output) <- "bsm"
+  return(output)
 }
