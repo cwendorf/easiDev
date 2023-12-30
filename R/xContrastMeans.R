@@ -11,7 +11,7 @@ estimateContrastMeans <- function(x, ...) {
   UseMethod("estimateContrastMeans")
 }
 
-estimateContrastMeans.wsm <- function(moments, corrs, contrast, conf.level = .95, ...) {
+estimateContrastMeans.wsm <- function(moments, corrs, contrast, conf.level = .95, main = NULL, ...) {
   N <- min(moments[, "N"])
   M <- moments[, "M"]
   SD <- moments[, "SD"]
@@ -26,12 +26,13 @@ estimateContrastMeans.wsm <- function(moments, corrs, contrast, conf.level = .95
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
   output <- list(results)
-  names(output) <- "Confidence Intervals for the Contrast of Means"
+  if (is.null(main)) main <- "Confidence Interval for the Contrast of Means"
+  names(output) <- main
   class(output) <- c("easi", "list")
   return(output)
 }
 
-estimateContrastMeans.bsm <- function(moments, contrast, conf.level = .95, ...) {
+estimateContrastMeans.bsm <- function(moments, contrast, conf.level = .95, main = NULL, ...) {
   N <- moments[, "N"]
   M <- moments[, "M"]
   SD <- moments[, "SD"]
@@ -46,14 +47,49 @@ estimateContrastMeans.bsm <- function(moments, contrast, conf.level = .95, ...) 
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
   output <- list(results)
-  names(output) <- "Confidence Intervals for the Contrast of Means"
+  if (is.null(main)) main <- "Confidence Interval for the Contrast of Means"
+  names(output) <- main
   class(output) <- c("easi", "list")
   return(output)
 }
 
+estimateContrastMeans.data.frame <- function(frame, contrast, conf.level = .95, main = NULL, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
+  estimateContrastMeans(moments, corrs, contrast, conf.level = conf.level, main = main, labels = labels, ...)
+}
+
+estimateContrastMeans.formula <- function(formula, contrast, conf.level = .95, main = NULL, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  estimateContrastMeans(moments, contrast, conf.level = conf.level, main = main, labels = labels, ...)
+}
+
 ### Confidence Interval Plots
 
-plotContrast <- plotContrastMeans <- function(..., main = NULL, digits = 3, ylab = "Mean Contrast", xlab = "", mu = 0, line = NULL, rope = NULL, conf.level = .95, connect = FALSE, values = TRUE, pos = 2, ylim = NULL, add = FALSE, pch = 17, col = "black", offset = 0, intervals = TRUE) {
-  results <- estimateContrastMeans(..., conf.level = conf.level, main = main, digits = digits)
-  plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+plotContrast <- function(x, ...) {
+  UseMethod("plotContrastMeans")
+}
+
+plotContrastMeans <- function(x, ...) {
+  UseMethod("plotContrastMeans")
+}
+
+plotContrastMeans.bsm <- function(moments, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+  results <- estimateContrastMeans(moments, contrast = contrast, conf.level = conf.level, labels = labels)
+  plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+}
+
+plotContrastMeans.wsm <- function(moments, corrs, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+  results <- estimateContrastMeans(moments, corrs, contrast = contrast, conf.level = conf.level, labels = labels)
+  plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+}
+
+plotContrastMeans.formula <- function(formula, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+  results <- estimateContrastMeans(formula, contrast = contrast, conf.level = conf.level, labels = labels)
+  plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+}
+
+plotContrastMeans.data.frame <- function(frame, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+  results <- estimateContrastMeans(frame, contrast = contrast, conf.level = conf.level, labels = labels)
+  plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }

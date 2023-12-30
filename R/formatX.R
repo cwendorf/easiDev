@@ -3,9 +3,9 @@
 
 ### Frames
 
-.formatFrame <- function(results, digits = 3, width = NULL) {
+.formatFrame <- function(results, digits = 3, width = NULL, ...) {
   if (is.null(width)) width <- digits + 4
-  format(as.data.frame(round(results, digits = digits)), width = width, trim = TRUE, nsmall = digits)
+  format(as.data.frame(round(results, digits = digits)), width = width, trim = TRUE, nsmall = digits, ...)
 }
 
 .unformatFrame <- function(results) {
@@ -14,8 +14,8 @@
 
 ### Lists
 
-.formatList <- function(results, main = NULL, digits = 3, width = NULL) {
-  results <- lapply(results, .formatFrame, digits, width)
+.formatList <- function(results, main = NULL, digits = 3, width = NULL, ...) {
+  results <- lapply(results, .formatFrame, digits, width, ...)
   if (!is.null(main)) names(results) <- main
   results
 }
@@ -25,15 +25,15 @@
 }
 
 .deList <- function(results) {
-  out <- results[[1]]
-  colnames(out)[1] <- "Est"
+  output <- results[[1]]
+  colnames(output)[1] <- "Est"
   if (length(results) > 1) {
     for (i in 2:length(results)) {
       colnames(results[[i]])[1] <- "Est"
-      out <- rbind(out, results[[i]])
+      output <- rbind(output, results[[i]])
     }
   }
-  return(out)
+  return(output)
 }
 
 .collapseList <- function(results, main = NULL) {
@@ -42,29 +42,29 @@
   } else {
     main <- main
   }
-  out <- list(.deList(results))
-  names(out) <- main
-  return(out)
+  output <- list(.deList(results))
+  names(output) <- main
+  return(output)
 }
 
 ### Print
 
-print.bsm <- print.wsm <- function(x, ...) {
+print.bsm <- print.wsm <- function(x, main = "Statistics for the Data", ...) {
   m <- list(unclass(x))
-  names(m) <- "Summary Statistics for the Data"
+  names(m) <- main
   print(.formatList(m, ...))
   invisible(x)
 }
 
-print.cor <- function(x, ...) {
+print.cor <- function(x, main = "Correlations for the Data", ...) {
   m <- list(unclass(x))
-  names(m) <- "Correlations for the Data"
+  names(m) <- main
   print(.formatList(m, ...))
   invisible(x)
 }
 
-print.easi <- function(x, ...) {
-  print(.formatList(x, ...))
+print.easi <- function(x, main = NULL, ...) {
+  print(.formatList(x, main = main, ...))
 }
 
 
@@ -72,19 +72,19 @@ print.easi <- function(x, ...) {
 
 construct <- function(..., class = "data") {
   if (class == "bsm" || class == "wsm") {
-    out <- rbind(...)
-    class(out) <- class
-    comment(out) <- "Moments"
+    output <- rbind(...)
+    class(output) <- class
+    comment(output) <- "Moments"
   } else if (class == "data") {
-    out <- data.frame(...)
-    comment(out) <- "Data"
+    output <- data.frame(...)
+    comment(output) <- "Data"
   } else if (class == "cor") {
-    out <- rbind(...)
-    colnames(out) <- rownames(out)
-    class(out) <- class
-    comment(out) <- "Correlations"
+    output <- rbind(...)
+    colnames(output) <- rownames(output)
+    class(output) <- class
+    comment(output) <- "Correlations"
   }
-  return(out)
+  return(output)
 }
 
 ### Focusing

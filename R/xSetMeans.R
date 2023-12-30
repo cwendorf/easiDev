@@ -11,7 +11,7 @@ estimateSetMeans <- function(x, ...) {
   UseMethod("estimateSetMeans")
 }
 
-estimateSetMeans.wsm <- estimateSetMeans.bsm <- function(moments, mu = 0, conf.level = .95, ...) {
+estimateSetMeans.wsm <- estimateSetMeans.bsm <- function(moments, conf.level = .95, mu = 0, main = NULL, ...) {
   N <- moments[, "N"]
   M <- moments[, "M"]
   SD <- moments[, "SD"]
@@ -24,19 +24,20 @@ estimateSetMeans.wsm <- estimateSetMeans.bsm <- function(moments, mu = 0, conf.l
   results <- data.frame(Est, SE, df, LL, UL)
   rownames(results) <- rownames(moments)
   output <- list(results)
-  names(output) <- "Confidence Intervals for the Means"
+  if (is.null(main)) main <- "Confidence Intervals for the Means"
+  names(output) <- main
   class(output) <- c("easi", "list")
   return(output)
 }
 
-estimateSetMeans.data.frame <- function(frame, mu = 0, conf.level = .95, ...) {
+estimateSetMeans.data.frame <- function(frame, conf.level = .95, mu = 0, main = NULL, ...) {
   moments <- describeMoments(frame)
-  estimateSetMeans(moments, conf.level = conf.level, mu = mu)
+  estimateSetMeans(moments, conf.level = conf.level, mu = mu, main = main, ...)
 }
 
-estimateSetMeans.formula <- function(formula, mu = 0, conf.level = .95, ...) {
+estimateSetMeans.formula <- function(formula, conf.level = .95, mu = 0, main = NULL, ...) {
   moments <- describeMoments(formula)
-  estimateSetMeans(moments, conf.level = conf.level, mu = mu)
+  estimateSetMeans(moments, conf.level = conf.level, mu = mu, main = main, ...)
 }
 
 ### Confidence Interval Plots
@@ -49,18 +50,18 @@ plotSetMeans <- function(x, ...) {
   UseMethod("plotSetMeans")
 }
 
-plotSetMeans.wsm <- plotSetMeans.data.frame <- function(..., mu = 0, conf.level = .95, add = FALSE, main = NULL, ylab = "outputcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, pos = 2, pch = 16, col = "black", connect = TRUE, offset = 0, intervals = TRUE) {
+plotSetMeans.wsm <- plotSetMeans.data.frame <- function(..., conf.level = .95, mu = 0, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, pos = 2, pch = 16, col = "black", connect = TRUE, offset = 0, intervals = TRUE) {
   results <- estimateSetMeans(..., mu = mu, conf.level = conf.level, main = main, digits = digits)
   plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
   invisible(eval(...))
 }
 
-plotSetMeans.bsm <- plotSetMeans.formula <- function(..., mu = 0, conf.level = .95, add = FALSE, main = NULL, ylab = "outputcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, pos = 2, pch = 16, col = "black", connect = FALSE, offset = 0, intervals = TRUE) {
+plotSetMeans.bsm <- plotSetMeans.formula <- function(..., conf.level = .95, mu = 0, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, pos = 2, pch = 16, col = "black", connect = FALSE, offset = 0, intervals = TRUE) {
   results <- estimateSetMeans(..., mu = mu, conf.level = conf.level, main = main, digits = digits)
   plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
   invisible(eval(...))
 }
 
-addAll <- function(...) {
+addSet <- function(...) {
   plotSetMeans(..., add = TRUE)
 }

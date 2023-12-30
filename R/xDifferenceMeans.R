@@ -11,7 +11,7 @@ estimateDifferenceMeans <- function(x, ...) {
   UseMethod("estimateDifferenceMeans")
 }
 
-estimateDifferenceMeans.wsm <- function(moments, corrs, mu = 0, conf.level = .95, ...) {
+estimateDifferenceMeans.wsm <- function(moments, corrs, conf.level = .95, mu = 0, main = NULL, ...) {
   moments <- moments[1:2,]
   N <- moments[, "N"]
   M <- moments[, "M"]
@@ -28,12 +28,13 @@ estimateDifferenceMeans.wsm <- function(moments, corrs, mu = 0, conf.level = .95
   results <- data.frame(Est, SE, df, LL, UL)
   rownames(results) <- "Comparison"
   output <- list(results)
-  names(output) <- "Confidence Intervals for the Difference of Means"
+  if (is.null(main)) main <- "Confidence Interval for the Difference of Means"
+  names(output) <- main
   class(output) <- c("easi", "list")
   return(output)
 }
 
-estimateDifferenceMeans.bsm <- function(moments, mu = 0, conf.level = .95, ...) {
+estimateDifferenceMeans.bsm <- function(moments, conf.level = .95, mu = 0, main = NULL, ...) {
   moments <- moments[1:2,]
   N <- moments[, "N"]
   M <- moments[, "M"]
@@ -47,18 +48,50 @@ estimateDifferenceMeans.bsm <- function(moments, mu = 0, conf.level = .95, ...) 
   results <- data.frame(Est, SE, df, LL, UL)
   rownames(results) <- "Comparison"
   output <- list(results)
-  names(output) <- "Confidence Intervals for the Difference of Means"
+  if (is.null(main)) main <- "Confidence Interval for the Difference of Means"
+  names(output) <- main
   class(output) <- c("easi", "list")
   return(output)
 }
 
-estimateDifferenceMeans.data.frame <- function(frame, mu = 0, conf.level = .95, labels = NULL, ...) {
+estimateDifferenceMeans.data.frame <- function(frame, conf.level = .95, mu = 0, main = NULL, labels = NULL, ...) {
   moments <- describeMoments(frame)
   corrs <- describeCorrelations(frame)
-  estimateDifferenceMeans(moments, corrs, conf.level = conf.level, labels = labels)
+  estimateDifferenceMeans(moments, corrs, conf.level = conf.level, mu = mu, main = main, labels = labels, ...)
 }
 
-estimateDifferenceMeans.formula <- function(formula, mu = 0, conf.level = .95, labels = NULL, ...) {
+estimateDifferenceMeans.formula <- function(formula, conf.level = .95, mu = 0, main = NULL, labels = NULL, ...) {
   moments <- describeMoments(formula)
-  estimateDifferenceMeans(moments, conf.level = conf.level, labels = labels)
+  estimateDifferenceMeans(moments,conf.level = conf.level,  mu = mu, main = main, labels = labels, ...)
 }
+
+### Confidence Interval Plots
+
+plotDifference <- function(x, ...) {
+  UseMethod("plotDifferenceMeans")
+}
+
+plotDifferenceMeans <- function(x, ...) {
+  UseMethod("plotDifferenceMeans")
+}
+
+plotDifferenceMeans.bsm <- function(moments, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+  results <- estimateDifferenceMeans(moments, conf.level = conf.level, mu = mu, labels = labels)
+  plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+}
+
+plotDifferenceMeans.wsm <- function(moments, corrs, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+  results <- estimateDifferenceMeans(moments, corrs, conf.level = conf.level, mu = mu, labels = labels)
+  plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+}
+
+plotDifferenceMeans.formula <- function(formula, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+  results <- estimateDifferenceMeans(formula, conf.level = conf.level, mu = mu, labels = labels)
+  plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+}
+
+plotDifferenceMeans.data.frame <- function(frame, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+  results <- estimateDifferenceMeans(frame, conf.level = conf.level, mu = mu, labels = labels)
+  plotIntervals(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+}
+
