@@ -1,0 +1,174 @@
+---
+title: "Factorial Alternative Data Example"
+description: >
+  This page examines a two-factor between-subjects (factorial) design using raw data input, focusing on comparisons and contrasts.
+output: rmarkdown::html_vignette
+---
+
+```{r,include=FALSE}
+if (!require(easiDev)) {
+  if (!require(remotes)) install.packages("remotes")
+  remotes::install_github("cwendorf/easiDev")
+}
+library(easiDev)
+```
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(fig.width = 7, fig.height = 7, comment = NA)
+```
+
+## Factorial Vignette
+
+This vignette analyzes data from a two-factor between-subjects design.
+
+```{r}
+source("http://raw.githubusercontent.com/cwendorf/easiDev/main/source-easiDev.R")
+```
+
+```{r,include=FALSE}
+devtools::source_gist("8e6e5dc401e3fc1042ef7a030f9d19c7", filename = "revised_toc.R")
+thisfile <- knitr::current_input()
+revised_toc(thisfile, base_level = 3, toc_depth = 4)
+```
+
+---
+
+### Data Management
+
+#### Data Entry
+
+```{r}
+FactorA <- c(1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2)
+FactorB <- c(1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2)
+Outcome <- c(0, 0, 3, 5, 4, 7, 4, 9, 9, 6, 4, 9, 3, 6, 8, 3)
+FactorA <- factor(FactorA, levels = c(1, 2), labels = c("A1", "A2"))
+FactorB <- factor(FactorB, levels = c(1, 2), labels = c("B1", "B2"))
+FactorialData <- data.frame(FactorA, FactorB, Outcome)
+FactorialData
+```
+
+#### Descriptive Statistics
+
+```{r}
+descMeansBy(Outcome ~ FactorA, by = FactorB)
+```
+
+### Analyses of the Means
+
+#### Confidence Intervals
+
+```{r}
+ciMeansBy(Outcome ~ FactorA, by = FactorB)
+ciMeansBy(Outcome ~ FactorA, by = FactorB, conf.level = .99)
+```
+
+#### Significance Tests
+
+```{r}
+nhstMeansBy(Outcome ~ FactorA, by = FactorB)
+nhstMeansBy(Outcome ~ FactorA, by = FactorB, mu = 5)
+```
+
+### Analyses of the Effects
+
+#### Source Table
+
+```{r}
+descMultifactor(Outcome ~ FactorA, by = FactorB)
+```
+
+#### Significance Test
+
+```{r}
+nhstMultifactor(Outcome ~ FactorA, by = FactorB)
+```
+
+#### Effect Size
+
+```{r}
+pvaMultifactor(Outcome ~ FactorA, by = FactorB)
+```
+
+
+### Factorial Data
+
+```{r}
+FactorA <- c(rep(1, 20), rep(2, 20), rep(3, 20))
+FactorA <- factor(FactorA, levels = c(1, 2, 3), labels = c("A1", "A2", "A3"))
+FactorB <- c(rep(1, 10), rep(2, 10), rep(1, 10), rep(2, 10), rep(1, 10), rep(2, 10))
+FactorB <- factor(FactorB, levels = c(1, 2), labels = c("B1", "B2"))
+Outcome <- c(6, 8, 6, 8, 10, 8, 10, 9, 8, 7, 5, 9, 10, 9, 11, 4, 11, 7, 6, 8, 7, 13, 11, 10, 13, 8, 11, 14, 12, 11, 7, 8, 7, 11, 10, 7, 8, 4, 8, 10, 9, 16, 11, 12, 15, 13, 9, 14, 11, 10, 8, 6, 8, 11, 5, 7, 9, 3, 6, 7)
+FactorialData <- construct(FactorA, FactorB, Outcome)
+
+```
+
+```{r}
+### Split Data
+
+splitData <- function(x, ...) {
+  UseMethod("splitData")
+}
+
+splitData.data.frame <- function(frame, by, ...) {
+  MixedData <- data.frame(by, data)
+  SplitData <- split(MixedData[-1], by)
+  return(SplitData)
+}
+
+splitData.formula <- function(formula, by, ...) {
+  Group <- eval(formula[[3]])
+  Outcome <- eval(formula[[2]])
+  FactorialData <- data.frame(by, Group, Outcome)
+  SplitData <- split(FactorialData[-1], by)
+  return(SplitData)
+}
+
+```
+
+```{r}
+(FactorialData) |> focus(Outcome~FactorA) |> splitData(FactorB) -> SplitFactorial
+class(SplitFactorial) -> "split.frame"
+SplitFactorial
+
+
+lapply(test.list, FUN=function(x) perm.test(formula=(cover ~ group),data=x)) 
+SplitFactorial |> lapply(FUN=function(x) describeMoments(formula=(Outcome~FactorA)))
+
+SplitFactorial |> lapply(function(x) describeMoments(Outcome~FactorA))
+
+SplitFactorial |> lapply(function(x) (Outcome~FactorA) |> describeMoments())
+SplitFactorial |> lapply(\(x) (Outcome~FactorA) |> describeMoments())
+
+```
+
+### Factorial Summary
+
+```{r}
+
+combine <- function(..., class = NULL) {
+  output <- list(...)
+  class(output) <- class
+  return(output)
+}
+```
+
+```{r}
+A1 <- c(N = 10, M = 8.000, SD = 1.414)
+A2 <- c(N = 10, M = 11.000, SD = 2.211)
+A3 <- c(N = 10, M = 12.000, SD = 2.449)
+FactorialSummaryB1 <- construct(A1, A2, A3, class = "bsm")
+A1 <- c(N = 10, M = 8.000, SD = 2.449)
+A2 <- c(N = 10, M = 8.000, SD = 2.000)
+A3 <- c(N = 10, M = 7.000, SD = 2.211)
+FactorialSummaryB2 <- construct(A1, A2, A3, class = "bsm")
+FactorialSummary <- combine(B1 = FactorialSummaryB1, B2 = FactorialSummaryB2, class = "bsl")
+```
+
+```{r}
+estimateMeansSet.bsl <- function(list, ...) {
+  lapply(list, estimateMeansSet, ...)
+}
+
+estimateSet(FactorialSummary)
+
+```

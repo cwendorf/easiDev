@@ -1,0 +1,90 @@
+---
+title: "Mixed Alternative Data Example"
+description: >
+  This page examines a two-factor mixed design (one between-subjects and one within-subjects factor) using raw data input, focusing on comparisons and contrasts.
+output: rmarkdown::html_vignette
+---
+
+```{r,include=FALSE}
+if (!require(easiDev)) {
+  if (!require(remotes)) install.packages("remotes")
+  remotes::install_github("cwendorf/easiDev")
+}
+library(easiDev)
+```
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(fig.width = 7, fig.height = 7, comment = NA)
+```
+
+## Mixed Vignette
+
+This vignette analyzes data from a two-factor mixed design.
+
+```{r}
+source("http://raw.githubusercontent.com/cwendorf/easiDev/main/source-easiDev.R")
+```
+
+```{r,include=FALSE}
+devtools::source_gist("8e6e5dc401e3fc1042ef7a030f9d19c7", filename = "revised_toc.R")
+thisfile <- knitr::current_input()
+revised_toc(thisfile, base_level = 3, toc_depth = 4)
+```
+
+---
+
+### Data Management
+
+#### Data Entry
+
+```{r}
+Factor <- c(1, 1, 1, 1, 2, 2, 2, 2)
+Outcome1 <- c(0, 0, 3, 5, 1, 3, 6, 6)
+Outcome2 <- c(4, 7, 4, 9, 3, 1, 6, 6)
+Outcome3 <- c(4, 9, 6, 9, 3, 3, 6, 8)
+Factor <- factor(Factor, levels = c(1, 2), labels = c("Level1", "Level2"))
+MixedData <- data.frame(Factor, Outcome1, Outcome2, Outcome3)
+MixedData
+```
+
+#### Descriptive Statistics
+
+```{r}
+descMeansBy(cbind(Outcome1, Outcome2, Outcome3), by = Factor)
+```
+
+### Analyses of the Means
+
+#### Confidence Intervals
+
+```{r}
+ciMeansBy(cbind(Outcome1, Outcome2, Outcome3), by = Factor)
+ciMeansBy(cbind(Outcome1, Outcome2, Outcome3), by = Factor, conf.level = .99)
+```
+
+#### Significance Tests
+
+```{r}
+nhstMeansBy(cbind(Outcome1, Outcome2, Outcome3), by = Factor)
+nhstMeansBy(cbind(Outcome1, Outcome2, Outcome3), by = Factor, mu = 5)
+```
+
+### Analyses of the Effects
+
+#### Source Table
+
+```{r}
+descMultifactor(cbind(Outcome1, Outcome2, Outcome3), by = Factor)
+```
+
+#### Significance Test
+
+```{r}
+nhstMultifactor(cbind(Outcome1, Outcome2, Outcome3), by = Factor)
+```
+
+#### Effect Size
+
+```{r}
+pvaMultifactor(cbind(Outcome1, Outcome2, Outcome3), by = Factor)
+```
