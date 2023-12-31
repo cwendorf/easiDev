@@ -118,7 +118,7 @@ plotIntervals <- function(x, ...) {
   UseMethod("plotIntervals")
 }
 
-plotIntervals.list <- function(results, add = FALSE, ...) {
+plotIntervals.easi <- function(results, add = FALSE, ...) {
   out <- results
   if (length(results) == 1) {
     results[[1]] <- results[[1]][, c(1, (ncol(results[[1]]) - 1):ncol(results[[1]]))]
