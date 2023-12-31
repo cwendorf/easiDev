@@ -11,15 +11,7 @@
 
 ### Installation
 
-This package is not currently on CRAN, but can be installed and loaded using these R commands:
-
-``` r
-install.packages("remotes")
-remotes::install_github("cwendorf/easiDev")
-library(easiDev)
-```
-
-If you do not wish a full install, the latest functions can be made available using these R commands:
+The latest functions can be made available using these R commands:
 
 ```r
 source("http://raw.githubusercontent.com/cwendorf/easiDev/main/source-easiDev.R")
