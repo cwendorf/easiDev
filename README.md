@@ -22,5 +22,5 @@ library(easiDev)
 If you do not wish a full install, the latest functions can be made available using these R commands:
 
 ```r
-source("http://raw.githubusercontent.com/cwendorf/easiOrigin/main/source-easiDev.R")
+source("http://raw.githubusercontent.com/cwendorf/easiDev/main/source-easiDev.R")
 ```
