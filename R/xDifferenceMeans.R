@@ -34,7 +34,7 @@ estimateDifferenceMeans.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   return(output)
 }
 
-estimateDifferenceMeans.bsm <- function(moments, conf.level = .95, mu = 0, main = NULL, ...) {
+estimateDifferenceMeans.bsm <- function(moments, conf.level = .95, mu = 0, ...) {
   moments <- moments[1:2,]
   N <- moments[, "N"]
   M <- moments[, "M"]
@@ -48,21 +48,20 @@ estimateDifferenceMeans.bsm <- function(moments, conf.level = .95, mu = 0, main 
   results <- data.frame(Est, SE, df, LL, UL)
   rownames(results) <- "Comparison"
   output <- list(results)
-  if (is.null(main)) main <- "Confidence Interval for the Difference of Means"
-  names(output) <- main
+  names(output) <- "Confidence Interval for the Difference of Means"
   class(output) <- c("easi", "list")
   return(output)
 }
 
-estimateDifferenceMeans.data.frame <- function(frame, conf.level = .95, mu = 0, main = NULL, labels = NULL, ...) {
+estimateDifferenceMeans.data.frame <- function(frame, conf.level = .95, mu = 0, labels = NULL, ...) {
   moments <- describeMoments(frame)
   corrs <- describeCorrelations(frame)
-  estimateDifferenceMeans(moments, corrs, conf.level = conf.level, mu = mu, main = main, labels = labels, ...)
+  estimateDifferenceMeans(moments, corrs, conf.level = conf.level, mu = mu, labels = labels)
 }
 
-estimateDifferenceMeans.formula <- function(formula, conf.level = .95, mu = 0, main = NULL, labels = NULL, ...) {
+estimateDifferenceMeans.formula <- function(formula, conf.level = .95, mu = 0, labels = NULL, ...) {
   moments <- describeMoments(formula)
-  estimateDifferenceMeans(moments,conf.level = conf.level,  mu = mu, main = main, labels = labels, ...)
+  estimateDifferenceMeans(moments,conf.level = conf.level,  mu = mu, labels = labels)
 }
 
 ### Confidence Interval Plots

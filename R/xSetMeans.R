@@ -11,7 +11,7 @@ estimateSetMeans <- function(x, ...) {
   UseMethod("estimateSetMeans")
 }
 
-estimateSetMeans.wsm <- estimateSetMeans.bsm <- function(moments, conf.level = .95, mu = 0, main = NULL, ...) {
+estimateSetMeans.wsm <- estimateSetMeans.bsm <- function(moments, conf.level = .95, mu = 0, ...) {
   N <- moments[, "N"]
   M <- moments[, "M"]
   SD <- moments[, "SD"]
@@ -24,20 +24,19 @@ estimateSetMeans.wsm <- estimateSetMeans.bsm <- function(moments, conf.level = .
   results <- data.frame(Est, SE, df, LL, UL)
   rownames(results) <- rownames(moments)
   output <- list(results)
-  if (is.null(main)) main <- "Confidence Intervals for the Means"
-  names(output) <- main
+  names(output) <- "Confidence Intervals for the Means"
   class(output) <- c("easi", "list")
   return(output)
 }
 
-estimateSetMeans.data.frame <- function(frame, conf.level = .95, mu = 0, main = NULL, ...) {
+estimateSetMeans.data.frame <- function(frame, conf.level = .95, mu = 0, ...) {
   moments <- describeMoments(frame)
-  estimateSetMeans(moments, conf.level = conf.level, mu = mu, main = main, ...)
+  estimateSetMeans(moments, conf.level = conf.level, mu = mu, ...)
 }
 
-estimateSetMeans.formula <- function(formula, conf.level = .95, mu = 0, main = NULL, ...) {
+estimateSetMeans.formula <- function(formula, conf.level = .95, mu = 0, ...) {
   moments <- describeMoments(formula)
-  estimateSetMeans(moments, conf.level = conf.level, mu = mu, main = main, ...)
+  estimateSetMeans(moments, conf.level = conf.level, mu = mu, ...)
 }
 
 ### Confidence Interval Plots

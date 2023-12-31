@@ -11,7 +11,7 @@ estimateContrastMeans <- function(x, ...) {
   UseMethod("estimateContrastMeans")
 }
 
-estimateContrastMeans.wsm <- function(moments, corrs, contrast, conf.level = .95, main = NULL, ...) {
+estimateContrastMeans.wsm <- function(moments, corrs, contrast, conf.level = .95, ...) {
   N <- min(moments[, "N"])
   M <- moments[, "M"]
   SD <- moments[, "SD"]
@@ -26,13 +26,12 @@ estimateContrastMeans.wsm <- function(moments, corrs, contrast, conf.level = .95
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
   output <- list(results)
-  if (is.null(main)) main <- "Confidence Interval for the Contrast of Means"
-  names(output) <- main
+  names(output) <- "Confidence Interval for the Contrast of Means"
   class(output) <- c("easi", "list")
   return(output)
 }
 
-estimateContrastMeans.bsm <- function(moments, contrast, conf.level = .95, main = NULL, ...) {
+estimateContrastMeans.bsm <- function(moments, contrast, conf.level = .95, ...) {
   N <- moments[, "N"]
   M <- moments[, "M"]
   SD <- moments[, "SD"]
@@ -47,21 +46,20 @@ estimateContrastMeans.bsm <- function(moments, contrast, conf.level = .95, main 
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
   output <- list(results)
-  if (is.null(main)) main <- "Confidence Interval for the Contrast of Means"
-  names(output) <- main
+  names(output) <- "Confidence Interval for the Contrast of Means"
   class(output) <- c("easi", "list")
   return(output)
 }
 
-estimateContrastMeans.data.frame <- function(frame, contrast, conf.level = .95, main = NULL, labels = NULL, ...) {
+estimateContrastMeans.data.frame <- function(frame, contrast, conf.level = .95, labels = NULL, ...) {
   moments <- describeMoments(frame)
   corrs <- describeCorrelations(frame)
-  estimateContrastMeans(moments, corrs, contrast, conf.level = conf.level, main = main, labels = labels, ...)
+  estimateContrastMeans(moments, corrs, contrast, conf.level = conf.level, labels = labels, ...)
 }
 
-estimateContrastMeans.formula <- function(formula, contrast, conf.level = .95, main = NULL, labels = NULL, ...) {
+estimateContrastMeans.formula <- function(formula, contrast, conf.level = .95, labels = NULL, ...) {
   moments <- describeMoments(formula)
-  estimateContrastMeans(moments, contrast, conf.level = conf.level, main = main, labels = labels, ...)
+  estimateContrastMeans(moments, contrast, conf.level = conf.level, labels = labels, ...)
 }
 
 ### Confidence Interval Plots

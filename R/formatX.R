@@ -17,7 +17,7 @@
 .formatList <- function(results, main = NULL, digits = 3, width = NULL, ...) {
   results <- lapply(results, .formatFrame, digits, width, ...)
   if (!is.null(main)) names(results) <- main
-  results
+  return(results)
 }
 
 .unformatList <- function(results) {
@@ -67,6 +67,9 @@ print.easi <- function(x, main = NULL, ...) {
   print(.formatList(x, main = main, ...))
 }
 
+view <- function(x) {
+  print.default(x)
+}
 
 ### Construction
 

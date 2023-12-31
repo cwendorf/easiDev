@@ -11,7 +11,7 @@ estimateComparisonMeans <- function(x, ...) {
   UseMethod("estimateComparisonMeans")
 }
 
-estimateComparisonMeans.bsm <- function(moments, conf.level = .95, mu = 0, main = NULL, ...) {
+estimateComparisonMeans.bsm <- function(moments, conf.level = .95, mu = 0, ...) {
   Levels <- estimateSet(moments, conf.level = conf.level, mu = 0, ...)
   Diff <- estimateDifference(moments, conf.level = conf.level, mu = 0, ...)
   output <- c(Levels, Diff)
@@ -19,7 +19,7 @@ estimateComparisonMeans.bsm <- function(moments, conf.level = .95, mu = 0, main 
   return(output)
 }
 
-estimateComparisonMeans.wsm <- function(moments, corrs, conf.level = .95, mu = 0, main = NULL, ...) {
+estimateComparisonMeans.wsm <- function(moments, corrs, conf.level = .95, mu = 0, ...) {
   Levels <- estimateSet(moments, corrs, conf.level = conf.level, mu = 0, ...)
   Diff <- estimateDifference(moments, corrs, conf.level = conf.level, mu = 0, ...)
   output <- c(Levels, Diff)
@@ -27,15 +27,15 @@ estimateComparisonMeans.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   return(output)
 }
 
-estimateComparisonMeans.data.frame <- function(frame, conf.level = .95, mu = 0, main = NULL, labels = NULL, ...) {
+estimateComparisonMeans.data.frame <- function(frame, conf.level = .95, mu = 0, labels = NULL, ...) {
   moments <- describeMoments(frame)
   corrs <- describeCorrelations(frame)
-  estimateComparisonMeans(moments, corrs, conf.level = conf.level, mu = 0, main = main, labels = labels, ...)
+  estimateComparisonMeans(moments, corrs, conf.level = conf.level, mu = 0, labels = labels, ...)
 }
 
-estimateComparisonMeans.formula <- function(formula, conf.level = .95, mu = 0, main = NULL, labels = NULL, ...) {
+estimateComparisonMeans.formula <- function(formula, conf.level = .95, mu = 0, labels = NULL, ...) {
   moments <- describeMoments(formula)
-  estimateComparisonMeans(moments, conf.level = conf.level, mu = 0, main = main, labels = labels, ...)
+  estimateComparisonMeans(moments, conf.level = conf.level, mu = 0, labels = labels, ...)
 }
 
 ### Confidence Interval Plots
