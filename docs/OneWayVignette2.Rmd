@@ -47,6 +47,9 @@ OneWayData <- construct(Factor, Outcome)
 (Outcome~Factor) |> describeMoments()
 (Outcome~Factor) |> estimateMeans(conf.level=.99)
 
+
+
+
 (Outcome~Factor) |> focus(Level1, Level2, Level3) |> plotMeans()
 (Outcome~Factor) |> focus(Level1, Level2) |> estimateMeans() |> plotIntervals()
 (Outcome~Factor) |> estimateMeans(contrast=c(-1, .5, .5))

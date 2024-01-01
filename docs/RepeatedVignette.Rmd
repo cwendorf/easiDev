@@ -33,131 +33,6 @@ revised_toc(thisfile, base_level = 3, toc_depth = 4)
 
 ---
 
-### Data Management
-
-#### Data Entry
-
-```{r}
-Outcome1 <- c(0, 0, 3, 5)
-Outcome2 <- c(4, 7, 4, 9)
-Outcome3 <- c(9, 6, 4, 9)
-RepeatedData <- data.frame(Outcome1, Outcome2, Outcome3)
-```
-
-#### Descriptive Statistics
-
-```{r}
-descMeans(RepeatedData)
-```
-
-### Analyses of the Means
-
-#### Confidence Intervals
-
-```{r,Repeated-MeansA}
-ciMeans(RepeatedData)
-graphMeans(RepeatedData)
-```
-
-```{r,Repeated-MeansB}
-ciMeans(RepeatedData, conf.level = .99)
-graphMeans(RepeatedData, conf.level = .99, mu = 5)
-```
-
-#### Significance Tests
-
-```{r}
-nhstMeans(RepeatedData)
-nhstMeans(RepeatedData, mu = 5)
-```
-
-### Analyses of a Mean Difference
-
-```{r}
-ComparisonData <- data.frame(Outcome1, Outcome2)
-```
-
-#### Confidence Interval 
-
-```{r,Repeated-DifferenceA}
-ciDifference(ComparisonData)
-graphDifference(ComparisonData)
-```
-
-```{r,Repeated-DifferenceB}
-ciDifference(ComparisonData, conf.level = .99)
-graphDifference(ComparisonData, conf.level = .99)
-```
-
-#### Significance Test 
-
-```{r}
-nhstDifference(ComparisonData)
-nhstDifference(ComparisonData, mu = -2)
-```
-
-### Analyses of the Pairwise Comparisons
-
-#### Confidence Intervals
-
-```{r,Repeated-PairwiseA}
-ciPairwise(RepeatedData)
-graphPairwise(RepeatedData)
-```
-
-```{r,Repeated-PairwiseB}
-ciPairwise(RepeatedData, conf.level = .99)
-graphPairwise(RepeatedData, mu = -2, conf.level = .99)
-```
-
-#### Significance Tests
-
-```{r}
-nhstPairwise(RepeatedData)
-nhstPairwise(RepeatedData, mu = -2)
-```
-
-### Analyses of a Set of Contrasts
-
-#### Confidence Intervals
-
-```{r,Repeated-ContrastsA}
-ciContrasts(RepeatedData, contrasts = contr.sum)
-graphContrasts(RepeatedData, contrasts = contr.sum)
-```
-
-```{r,Repeated-ContrastsB}
-ciContrasts(RepeatedData, contrasts = contr.sum, conf.level = .99)
-graphContrasts(RepeatedData, contrasts = contr.sum, conf.level = .99)
-```
-
-#### Significance Tests
-
-```{r}
-nhstContrasts(RepeatedData, contrasts = contr.sum)
-```
-
-### Analyses of the Effect
-
-#### Source Table
-
-```{r}
-descEffect(RepeatedData)
-```
-
-#### Significance Test
-
-```{r}
-nhstEffect(RepeatedData)
-```
-
-#### Effect Size
-
-```{r}
-pvaEffect(RepeatedData)
-```
-
-
 
 ```{r}
 Outcome1 <- c(6, 8, 6, 8, 10, 8, 10, 9, 8, 7)
@@ -168,30 +43,34 @@ RepeatedData <- construct(Outcome1, Outcome2, Outcome3)
 
 ```{r}
 (RepeatedData)
+(RepeatedData) |> describeMoments() |> view()
 (RepeatedData) |> describeMoments() |> print(digits=2,width=10,main="tough")
 (RepeatedData) |> describeCorrelations() |> print(digits=6)
 
-(RepeatedData) |> estimateSet()
-(RepeatedData) |> plotSet()
-(RepeatedData) |> focus(Outcome1) |> estimateSet()
-(RepeatedData) |> focus(Outcome1) |> plotSet(main="Single")
+(RepeatedData) |> estimateMeans()
 
-(RepeatedData) |> focus(Outcome1, Outcome2) |> estimateDifference()
-(RepeatedData) |> focus(Outcome1, Outcome2) |> plotDifference()
+(RepeatedData) |> focus(Outcome1, Outcome2) |> estimateMeans() |> print(digits=6,main=c("cool","cooler"))
+(RepeatedData) |> focus(Outcome1, Outcome2) |> plotMeans(main="cool",digits=6)
+(RepeatedData) |> focus(Outcome1, Outcome2) |> estimateMeans() |> plot(digits=6)
 
-(RepeatedData) |> focus(Outcome1, Outcome2) |> estimateComparison() |> print(digits=6,main=c("cool","cooler"))
-(RepeatedData) |> focus(Outcome1, Outcome2) |> plotComparison()
-
-(RepeatedData) |> estimateContrast(c(-1, .5, .5))
-(RepeatedData) |> estimateSubsets(c(-1, .5, .5)) |> view()
-(RepeatedData) |> plotSubsets(c(-1, .5, .5))
-
-
-(RepeatedData) |> describe() |> focus(Outcome1, Outcome2) |> estimate(RepeatedCorr) |> graph()
-
+(RepeatedData) |> estimateMeans(contrast = c(-1, .5, .5), conf.level=.99)
+(RepeatedData) |> estimateMeans(contrast = c(-1, .5, .5)) |> plot()
 
 ```
 
+```{R}
+(RepeatedData) |> describeCorrelations() |> print(digits=6)
+(RepeatedData) |> estimateCorrelations() |> .deList()
+
+(RepeatedData) |> estimateCorrelations() |> print(digits=6, width=10, main = "cools")
+(RepeatedData) |> estimateCorrelations() |> plot()
+
+```
+
+```{r}
+
+(RepeatedData) |> estimateMeans() |> print(digits=0)
+```
 
 ## Repeated Summary
 
@@ -210,28 +89,34 @@ RepeatedCorr <- construct(Outcome1, Outcome2, Outcome3, class = "cor")
 ```
 
 ```{r}
-(RepeatedSummary)
+(RepeatedSummary) |> print(digits=6,width=11)
 (RepeatedCorr) |> print(digits=5)
 
-(RepeatedSummary) |> class()
-(RepeatedSummary) |> print(digits=6,width=11)
 (RepeatedSummary) |> describeMoments() |> print(digits=5)
+(RepeatedSummary) |> estimateMeans() |> print(digits=8,width=12)
+(RepeatedSummary) |> estimateMeans() |> plot(digits=8,width=12)
 
-(RepeatedSummary) |> estimateSet() |> print(digits=8,width=12)
-(RepeatedSummary) |> plotSet()
+(RepeatedSummary) |> focus(Outcome1, Outcome2) |> estimateMeans(RepeatedCorr)
+(RepeatedSummary) |> focus(Outcome1, Outcome2) |> estimateMeans(RepeatedCorr) |> plot(main="Coolsville")
+(RepeatedSummary) |> focus(Outcome1, Outcome2) |> plotMeans(RepeatedCorr)
 
-(RepeatedSummary) |> focus(Outcome1, Outcome2) |> estimateDifference(RepeatedCorr)
-(RepeatedSummary) |> focus(Outcome1, Outcome2) |> plotDifference(RepeatedCorr)
+(RepeatedSummary) |> estimateMeans(RepeatedCorr, contrast = c(-1, .5, .5))
+(RepeatedSummary) |> estimateMeans(RepeatedCorr, contrast = c(-1, .5, .5)) |> plot()
 
-(RepeatedSummary) |> focus(Outcome1, Outcome3) |> estimateComparison(RepeatedCorr)
-(RepeatedSummary) |> focus(Outcome1, Outcome3) |> estimateComparison(RepeatedCorr)
-(RepeatedSummary) |> focus(Outcome1, Outcome2) |> plotComparison(RepeatedCorr)
+```
 
-(RepeatedSummary) |> estimateContrast(RepeatedCorr, c(-1, .5, .5))
+```{r}
+(RepeatedSummary) |> describeMoments() |> estimateMeans()
+(RepeatedSummary) |> describeMoments() |> estimateMeans() |> plot()
 
-(RepeatedSummary) |> estimateSubsets(RepeatedCorr, c(-1, .5, .5))
-(RepeatedSummary) |> plotSubsets(RepeatedCorr, c(-1, .5, .5))
+(RepeatedSummary) |> focus(Outcome1, Outcome2) |> describeMoments() |> estimateMeans(RepeatedCorr)
+(RepeatedSummary) |> describeMoments() |> focus(Outcome1, Outcome2) |> estimateMeans(RepeatedCorr)
 
-(RepeatedSummary) |> focus(Outcome1, Outcome2) |> estimate(RepeatedCorr) |> graph()
+(RepeatedSummary) |> describeMoments() |> focus(Outcome1, Outcome2) |> estimateMeans(RepeatedCorr) |> plot()
+(RepeatedSummary) |> describeMoments() |> focus(Outcome1, Outcome2) |> plotMeans(RepeatedCorr, conf.level= .99, rope=c(-2,2), main = "title")
+
+
+(RepeatedSummary) |> describeMoments() |> plotMeans(RepeatedCorr, contrast = c(-1, .5, .5))
+(RepeatedSummary) |> describeMoments() |> estimateMeans(RepeatedCorr, contrast = c(-1, .5, .5)) |> plot()
 
 ```

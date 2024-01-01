@@ -14,6 +14,19 @@ estimateMeans <- function(x, ..., contrast = NULL) {
   }
 }
 
+plotMeans <- function(x, ..., contrast = NULL) {
+  howmany <- nrow(describeMoments(x))
+  if (!is.null(contrast)) {
+    plot(estimateMeansSubsets(x, ..., contrast = contrast))
+  } else if (howmany == 2) {
+    plot(estimateMeansComparison(x, ...))
+  } else {
+    plot(estimateMeansSet(x, ...))
+  }
+  invisible(eval(x))
+}
+
+
 ### Means Set
 
 estimateMeansSet <- function(x, ...) {
@@ -34,10 +47,19 @@ estimateMeansSet.wsm <- estimateMeansSet.bsm <- function(moments, conf.level = .
   rownames(results) <- rownames(moments)
   output <- list(results)
   names(output) <- "Confidence Intervals for the Means"
-  class(output) <- c("easi", "list")
+  class(output) <- c("easi")
   return(output)
 }
 
+estimateMeansSet.data.frame <- function(frame, conf.level = .95, mu = 0, ...) {
+  moments <- describeMoments(frame)
+  estimateMeansSet(moments, conf.level = conf.level, mu = mu, ...)
+}
+
+estimateMeansSet.formula <- function(formula, conf.level = .95, mu = 0, ...) {
+  moments <- describeMoments(formula)
+  estimateMeansSet(moments, conf.level = conf.level, mu = mu, ...)
+}
 
 ### Means Difference
 
@@ -64,7 +86,7 @@ estimateMeansDifference.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   output <- list(results)
   if (is.null(main)) main <- "Confidence Interval for the Difference of Means"
   names(output) <- main
-  class(output) <- c("easi", "list")
+  class(output) <- c("easi")
   return(output)
 }
 
@@ -83,10 +105,20 @@ estimateMeansDifference.bsm <- function(moments, conf.level = .95, mu = 0, ...) 
   rownames(results) <- "Comparison"
   output <- list(results)
   names(output) <- "Confidence Interval for the Difference of Means"
-  class(output) <- c("easi", "list")
+  class(output) <- c("easi")
   return(output)
 }
 
+estimateMeansDifference.data.frame <- function(frame, conf.level = .95, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
+  estimateMeansDifference(moments, corrs, conf.level = conf.level, mu = mu, labels = labels)
+}
+
+estimateMeansDifference.formula <- function(formula, conf.level = .95, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  estimateMeansDifference(moments,conf.level = conf.level, mu = mu, labels = labels)
+}
 
 ### Means Comparison
 
@@ -95,21 +127,31 @@ estimateMeansComparison <- function(x, ...) {
 }
 
 estimateMeansComparison.bsm <- function(moments, conf.level = .95, mu = 0, ...) {
-  Levels <- estimateSetMeans(moments, conf.level = conf.level, mu = 0, ...)
-  Diff <- estimateDifferenceMeans(moments, conf.level = conf.level, mu = 0, ...)
+  Levels <- estimateMeansSet(moments, conf.level = conf.level, mu = 0, ...)
+  Diff <- estimateMeansDifference(moments, conf.level = conf.level, mu = 0, ...)
   output <- c(Levels, Diff)
-  class(output) <- c("easi", "list")
+  class(output) <- c("easi")
   return(output)
 }
 
 estimateMeansComparison.wsm <- function(moments, corrs, conf.level = .95, mu = 0, ...) {
-  Levels <- estimateSetMeans(moments, corrs, conf.level = conf.level, mu = 0, ...)
-  Diff <- estimateDifferenceMeans(moments, corrs, conf.level = conf.level, mu = 0, ...)
+  Levels <- estimateMeansSet(moments, corrs, conf.level = conf.level, mu = 0, ...)
+  Diff <- estimateMeansDifference(moments, corrs, conf.level = conf.level, mu = 0, ...)
   output <- c(Levels, Diff)
-  class(output) <- c("easi", "list")
+  class(output) <- c("easi")
   return(output)
 }
 
+estimateMeansComparison.data.frame <- function(frame, conf.level = .95, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
+  estimateMeansComparison(moments, corrs, conf.level = conf.level, mu = 0, labels = labels, ...)
+}
+
+estimateMeansComparison.formula <- function(formula, conf.level = .95, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  estimateMeansComparison(moments, conf.level = conf.level, mu = 0, labels = labels, ...)
+}
 
 ### Means Contrast
 
@@ -133,7 +175,7 @@ estimateMeansContrast.wsm <- function(moments, corrs, contrast, conf.level = .95
   rownames(results) <- c("Contrast")
   output <- list(results)
   names(output) <- "Confidence Interval for the Contrast of Means"
-  class(output) <- c("easi", "list")
+  class(output) <- c("easi")
   return(output)
 }
 
@@ -153,10 +195,20 @@ estimateMeansContrast.bsm <- function(moments, contrast, conf.level = .95, ...) 
   rownames(results) <- c("Contrast")
   output <- list(results)
   names(output) <- "Confidence Interval for the Contrast of Means"
-  class(output) <- c("easi", "list")
+  class(output) <- c("easi")
   return(output)
 }
 
+estimateMeansContrast.data.frame <- function(frame, contrast, conf.level = .95, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
+  estimateMeansContrast(moments, corrs, contrast, conf.level = conf.level, labels = labels, ...)
+}
+
+estimateMeansContrast.formula <- function(formula, contrast, conf.level = .95, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  estimateMeansContrast(moments, contrast, conf.level = conf.level, labels = labels, ...)
+}
 
 ### Means Subsets
 
@@ -178,7 +230,7 @@ estimateMeansSubsets.wsm <- function(moments, corrs, contrast, conf.level = .95,
   Diff <- estimateMeansContrast(moments, corrs, contrast = contrast, conf.level = conf.level)[[1]]
   output <- list(Subsets, Diff)
   names(output) <- c("Confidence Intervals for the Subsets of Means", "Confidence Interval for the Contrast of Means")
-  class(output) <- c("easi", "list")
+  class(output) <- c("easi")
   return(output)
 }
 
@@ -196,6 +248,17 @@ estimateMeansSubsets.bsm <- function(moments, contrast, conf.level = .95, labels
   Diff <- estimateMeansContrast(moments, contrast = contrast, conf.level = conf.level)[[1]]
   output <- list(Subsets, Diff)
   names(output) <- c("Confidence Intervals for the Subsets of Means", "Confidence Interval for the Contrast of Means")
-  class(output) <- c("easi", "list")
+  class(output) <- c("easi")
   return(output)
+}
+
+estimateMeansSubsets.data.frame <- function(frame, contrast, conf.level = .95, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
+  estimateMeansSubsets(moments, corrs, contrast, conf.level = conf.level, labels = labels, ...)
+}
+
+estimateMeansSubsets.formula <- function(formula, contrast, conf.level = .95, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  estimateMeansSubsets(moments, contrast, conf.level = conf.level, labels = labels, ...)
 }

@@ -118,8 +118,8 @@ plotIntervals <- function(x, ...) {
   UseMethod("plotIntervals")
 }
 
-plotIntervals.easi <- function(results, add = FALSE, ...) {
-  out <- results
+plotIntervals.easi <- plot.easi <- function(results, add = FALSE, ...) {
+  output <- results
   if (length(results) == 1) {
     results[[1]] <- results[[1]][, c(1, (ncol(results[[1]]) - 1):ncol(results[[1]]))]
     if (!add) .plotMain(results, ...)
@@ -131,7 +131,7 @@ plotIntervals.easi <- function(results, add = FALSE, ...) {
     if (!add) .plotComp(results, ...)
     .intervalsComp(results, ...)
   }
-  invisible(out)
+  invisible(output)
 }
 
 addIntervals <- function(...) {
