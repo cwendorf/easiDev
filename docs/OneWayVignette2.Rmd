@@ -44,8 +44,9 @@ OneWayData <- construct(Factor, Outcome)
 
 ```{r}
 
+
 (Outcome~Factor) |> describeMoments()
-(Outcome~Factor) |> estimateMeans(conf.level=.99)
+(Outcome~Factor) |> estimateMeansSet()
 
 
 
@@ -86,7 +87,7 @@ OneWaySummary <- construct(Level1, Level2, Level3, class = "bsm")
 (OneWaySummary)
 (OneWaySummary) |> print(digits=4,width=12)
 
-(OneWaySummary) |> estimateMeans(mu=3)
+(OneWaySummary) |> estimateMeansSet()
 (OneWaySummary) |> plotMeans(line=9,main="title",values=FALSE)
 (OneWaySummary) |> focus(Level1, Level2) |> estimateMeans(conf.level=.99, mu =3)
 (OneWaySummary) |> focus(Level1, Level2) |> estimateMeans() |> plot(main="title")

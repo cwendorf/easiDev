@@ -44,12 +44,30 @@ OneWayData <- construct(Factor, Outcome)
 
 ```{r}
 
-(Outcome~Factor) |> describeMoments()
-(Outcome~Factor) |> estimateMeans(conf.level=.99)
+plot.easi_main <- function(results, add = FALSE, ...) {
+  if (!add) .plotMain(results, ...)
+  .intervalsMain(results, ...)
+}
 
-(Outcome~Factor) |> focus(Level1, Level2, Level3) |> plotMeans()
-(Outcome~Factor) |> focus(Level1, Level2) |> estimateMeans() |> plotIntervals()
-(Outcome~Factor) |> estimateMeans(contrast=c(-1, .5, .5))
+plot.easi_comp <- function(results, add = FALSE, ...) {
+  if (!add) .plotComp(results, ...)
+  .intervalsComp(results, ...)
+}
+
+```
+
+
+```{r}
+
+(Outcome~Factor) |> describeMoments()
+(Outcome~Factor) |> estimateMeans()
+(Outcome~Factor) |> estimateMeans() |> plot()
+
+(Outcome~Factor) |> focus(Level1, Level2) |> estimateMeans()
+(Outcome~Factor) |> focus(Level1, Level2) |> estimateMeans() |> plot()
+(Outcome~Factor) |> focus(Level1, Level2) |> plotMeans()
+
+(Outcome~Factor) |> estimateMeansSubsets(contrast=c(-1, .5, .5))
 (Outcome~Factor) |> estimateMeans(contrast=c(-1, .5, .5),labels=c("neg","pos")) |> plot(main="Cool",digits=1,xlab="time")
 
 

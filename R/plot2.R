@@ -22,28 +22,22 @@
 ### Initialize Plots
 
 .plotMain <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, ...) {
-  if (is.null(main)) {
-    main <- names(results)
-  }
+  if (is.null(main)) main <- comment(results)
+  results <- results[, c(1, 4, 5)]
   main <- paste(strwrap(main, width = 0.7 * getOption("width")), collapse = "\n")
-  results <- .unformatFrame(results[[1]])
-  if (is.null(ylim)) {
-    ylim <- range(pretty(c(floor(min(results) - .5), ceiling(max(results) + .5))))
-  }
+  if (is.null(ylim)) ylim <- range(pretty(c(floor(min(results) - .5), ceiling(max(results) + .5))))
   par(mar = c(5, 5, 5, 3))
   plot(NULL, xaxs = "i", yaxs = "i", xaxt = "n", xlim = c(.4, nrow(results) + .6), ylim = ylim, xlab = xlab, cex.lab = 1.15, ylab = ylab, main = main, las = 1, bty = "l")
   axis(1, seq_len(nrow(results)), row.names(results))
 }
 
 .plotComp <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = "Difference", ...) {
-  if (is.null(main)) main <- names(results[1])
-  results <- .unformatFrame(results[[1]])
+  if (is.null(main)) main <- comment(results)
+  results <- results[, c(1, 4, 5)]
   main <- paste(strwrap(main, width = 0.7 * getOption("width")), collapse = "\n")
   graph <- results
   graph[3, ] <- results[3, ] + results[1, 1]
-  if (is.null(ylim)) {
-    ylim <- range(pretty(c(floor(min(graph[, 2]) - .5), ceiling(max(graph[, 3]) + .5))))
-  }
+  if (is.null(ylim)) ylim <- range(pretty(c(floor(min(graph[, 2]) - .5), ceiling(max(graph[, 3]) + .5))))
   par(mar = c(5, 5, 5, 5))
   plot(NULL, xaxt = "n", yaxt = "n", xaxs = "i", yaxs = "i", xlim = c(.4, 3.6), ylim = ylim, xlab = xlab, ylab = ylab, main = main, las = 1, cex.lab = 1.15, bty = "n")
   axis(1, .4:2.5, labels = FALSE, lwd.tick = 0)
@@ -68,7 +62,7 @@
 ### Interval Plots
 
 .intervalsMain <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = 2, pch = 16, col = "black", offset = 0, points = TRUE, intervals = TRUE, ...) {
-  results <- .unformatFrame(results[[1]])
+  results <- results[, c(1, 4, 5)]
   if (points) points(seq_len(nrow(results)) + offset, results[, 1], pch = pch, cex = 1.5, col = col, lwd = 2, bg = .colorIntensity(col, .6))
   if (intervals) arrows(seq_len(nrow(results)) + offset, results[, 2], seq_len(nrow(results)) + offset, results[, 3], col = col, lwd = 2, length = 0)
   if (connect) {
@@ -91,7 +85,7 @@
 }
 
 .intervalsComp <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = c(2, 2, 4), pch = c(15, 15, 17), col = "black", offset = 0, points = TRUE, intervals = TRUE, lines = TRUE, ...) {
-  results <- .unformatFrame(results[[1]])
+  results <- results[, c(1, 4, 5)]
   graph <- results
   graph[3, ] <- results[3, ] + results[1, 1]
   if (points) points(1:3 + offset, graph[, 1], pch = pch, cex = 1.5, col = col, lwd = 2, bg = .colorIntensity(col, .6))
@@ -112,28 +106,14 @@
   }
 }
 
-### Confidence Interval Plot
+### Plot Methods
 
-plotIntervals <- function(x, ...) {
-  UseMethod("plotIntervals")
+plot.easi_main <- function(results, add = FALSE, ...) {
+  if (!add) .plotMain(results, ...)
+  .intervalsMain(results, ...)
 }
 
-plotIntervals.easi <- plot.easi <- function(results, add = FALSE, ...) {
-  output <- results
-  if (length(results) == 1) {
-    results[[1]] <- results[[1]][, c(1, (ncol(results[[1]]) - 1):ncol(results[[1]]))]
-    if (!add) .plotMain(results, ...)
-    .intervalsMain(results, ...)
-  }
-  if (length(results) == 2 && nrow(results[[1]] != nrow(results[[2]]))) {
-    results <- .collapseList(results)
-    results[[1]] <- results[[1]][, c(1, (ncol(results[[1]]) - 1):ncol(results[[1]]))]
-    if (!add) .plotComp(results, ...)
-    .intervalsComp(results, ...)
-  }
-  invisible(output)
-}
-
-addIntervals <- function(...) {
-  plotIntervals(..., add = TRUE)
+plot.easi_comp <- function(results, add = FALSE, ...) {
+  if (!add) .plotComp(results, ...)
+  .intervalsComp(results, ...)
 }
