@@ -54,7 +54,7 @@ estimateMeansDifference.data.frame <- function(frame, conf.level = .95, mu = 0, 
 
 estimateMeansDifference.formula <- function(formula, conf.level = .95, mu = 0, labels = NULL, ...) {
   moments <- describeMoments(formula)
-  estimateMeansDifference(moments,conf.level = conf.level, mu = mu, labels = labels)
+  estimateMeansDifference(moments, conf.level = conf.level, mu = mu, labels = labels)
 }
 
 ### Plot
@@ -63,24 +63,24 @@ plotMeansDifference <- function(x, ...) {
   UseMethod("plotMeansDifference")
 }
 
-plotMeansDifference.bsm <- function(moments, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+plotMeansDifference.bsm <- function(moments, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE, ...) {
   results <- estimateMeansDifference(moments, conf.level = conf.level, mu = mu, labels = labels)
-  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
-plotMeansDifference.wsm <- function(moments, corrs, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+plotMeansDifference.wsm <- function(moments, corrs, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE, ...) {
   results <- estimateMeansDifference(moments, corrs, conf.level = conf.level, mu = mu, labels = labels)
-  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
-plotMeansDifference.formula <- function(formula, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+plotMeansDifference.formula <- function(formula, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE, ...) {
   results <- estimateMeansDifference(formula, conf.level = conf.level, mu = mu, labels = labels)
   plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
-plotMeansDifference.data.frame <- function(frame, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+plotMeansDifference.data.frame <- function(frame, add = FALSE, main = NULL, ylab = "Mean Difference", xlab = "", conf.level = .95, mu = 0, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE, ...) {
   results <- estimateMeansDifference(frame, conf.level = conf.level, mu = mu, labels = labels)
-  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
 addMeansDifference <- function(...) {

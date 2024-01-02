@@ -89,8 +89,8 @@ testMeansSet.formula <- function(formula, mu = 0, ...) {
 
 ### Standardize
 
-standardizeMeansSetSet <- function(x, ...) {
-  UseMethod("standardizeMeansSetSet")
+standardizeMeansSet <- function(x, ...) {
+  UseMethod("standardizeMeansSet")
 }
 
 standardizeMeansSet.wsm <- standardizeMeansSet.bsm <- function(moments, mu = 0, conf.level = .95, ...) {
@@ -124,14 +124,14 @@ standardizeMeansSet.wsm <- standardizeMeansSet.bsm <- function(moments, mu = 0, 
   ul2 <- ifelse(t > 0, a + c * ulp, a + c * llp)
   LL <- ifelse(skew < .001, ll1 * sqrt(1 / N), ll2 * sqrt(1 / N))
   UL <- ifelse(skew < .001, ul1 * sqrt(1 / N), ul2 * sqrt(1 / N))
-  results <- data.frame(d = CD, SE = SE, LL = LL, UL = UL)
+  results <- cbind(d = CD, SE = SE, LL = LL, UL = UL)
   rownames(results) <- rownames(moments)
   comment(results) <- "Confidence Intervals for the Standardized Means"
   class(results) <- c("easi", "intervalsMain")
   return(results)
 }
 
-standardizeMeansSetSet.data.frame <- function(frame, mu = 0, conf.level = .95, ...) {
+standardizeMeansSet.data.frame <- function(frame, mu = 0, conf.level = .95, ...) {
   moments <- describeMoments(data)
   standardizeMeansSet(moments, mu = mu, conf.level = conf.level)
 }

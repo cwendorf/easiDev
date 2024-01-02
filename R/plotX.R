@@ -23,7 +23,7 @@
 
 .plotMain <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, ...) {
   if (is.null(main)) main <- comment(results)
-  results <- results[, c(1, 4, 5)]
+  results <- results[, c(1, 4, 5), drop = FALSE]
   main <- paste(strwrap(main, width = 0.7 * getOption("width")), collapse = "\n")
   if (is.null(ylim)) ylim <- range(pretty(c(floor(min(results) - .5), ceiling(max(results) + .5))))
   par(mar = c(5, 5, 5, 3))
@@ -62,7 +62,7 @@
 ### Interval Plots
 
 .intervalsMain <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = 2, pch = 16, col = "black", offset = 0, points = TRUE, intervals = TRUE, ...) {
-  results <- results[, c(1, 4, 5)]
+  results <- results[, c(1, 4, 5), drop = FALSE]
   if (points) points(seq_len(nrow(results)) + offset, results[, 1], pch = pch, cex = 1.5, col = col, lwd = 2, bg = .colorIntensity(col, .6))
   if (intervals) arrows(seq_len(nrow(results)) + offset, results[, 2], seq_len(nrow(results)) + offset, results[, 3], col = col, lwd = 2, length = 0)
   if (connect) {
