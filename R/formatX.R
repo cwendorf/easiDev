@@ -14,7 +14,7 @@
 
 ### Print
 
-print.bsm <- print.wsm <- print.easi_main <- print.easi_comp <- print.cor <- function(x, ...) {
+print.bsm <- print.wsm <- print.intervalsMain <- print.intervalsComp <- print.cor <- function(x, ...) {
   cat("\n", comment(x), "\n\n", sep = "")
   m <- unclass(x)
   print(.formatFrame(m, ...))
@@ -29,7 +29,7 @@ construct <- function(..., class = "data") {
   if (class == "bsm" || class == "wsm") {
     results <- rbind(...)
     class(results) <- class
-    comment(results) <- "Moments"
+    comment(results) <- "Statistics for the Data"
   } else if (class == "data") {
     results <- data.frame(...)
     comment(results) <- "Data"
@@ -37,7 +37,7 @@ construct <- function(..., class = "data") {
     results <- rbind(...)
     colnames(results) <- rownames(results)
     class(results) <- class
-    comment(results) <- "Correlations"
+    comment(results) <- "Correlations for the Data"
   }
   return(results)
 }

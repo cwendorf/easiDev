@@ -14,7 +14,6 @@ estimateMeans <- function(x, ..., contrast = NULL) {
   }
 }
 
-
 plotMeans <- function(x, ..., contrast = NULL, connect = FALSE) {
   desc <- describeMoments(x)
   howmany <- nrow(desc)
@@ -25,19 +24,6 @@ plotMeans <- function(x, ..., contrast = NULL, connect = FALSE) {
     plot(estimateMeansComparison(x, ...), connect = connect)
   } else {
     plot(estimateMeansSet(x, ...), connect = connect)
-  }
-  invisible(eval(x))
-}
-
-plotMeans <- function(x, ..., contrast = NULL) {
-  howmany <- nrow(describeMoments(x))
-  #print(class(describeMoments(x)))
-  if (!is.null(contrast)) {
-    plot(estimateMeansSubsets(x, ..., contrast = contrast), ...)
-  } else if (howmany == 2) {
-    plot(estimateMeansComparison(x, ...), ...)
-  } else {
-    plot(estimateMeansSet(x, ...), ...)
   }
   invisible(eval(x))
 }
