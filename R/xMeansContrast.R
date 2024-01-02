@@ -62,24 +62,24 @@ plotMeansContrast <- function(x, ...) {
   UseMethod("plotMeansContrast")
 }
 
-plotMeansContrast.bsm <- function(moments, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+plotMeansContrast.bsm <- function(moments, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, line = NULL, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
   results <- estimateMeansContrast(moments, contrast = contrast, conf.level = conf.level, labels = labels)
-  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
-plotMeansContrast.wsm <- function(moments, corrs, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+plotMeansContrast.wsm <- function(moments, corrs, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, line = NULL, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
   results <- estimateMeansContrast(moments, corrs, contrast = contrast, conf.level = conf.level, labels = labels)
-  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
-plotMeansContrast.formula <- function(formula, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+plotMeansContrast.formula <- function(formula, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, line = NULL, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
   results <- estimateMeansContrast(formula, contrast = contrast, conf.level = conf.level, labels = labels)
-  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, cowsmnnect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, cowsmnnect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
-plotMeansContrast.data.frame <- function(frame, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
+plotMeansContrast.data.frame <- function(frame, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, line = NULL, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
   results <- estimateMeansContrast(frame, contrast = contrast, conf.level = conf.level, labels = labels)
-  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, line = line, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
 addMeansContrast <- function(...) {
@@ -210,9 +210,9 @@ standardizeMeansContrast.bsm <- function(moments, contrast, conf.level = .95, la
   return(results)
 }
 
-standardizeMeansContrast.default <- function(frame, contrast, conf.level = .95, labels = NULL, ...) {
-  moments <- describeMoments(data)
-  corrs <- describeCorrelations(data)
+standardizeMeansContrast.data.frame <- function(frame, contrast, conf.level = .95, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
   standardizeMeansContrast(moments, corrs, contrast, conf.level = conf.level, labels = labels)
 }
 

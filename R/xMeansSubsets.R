@@ -132,7 +132,7 @@ testMeansSubsets.data.frame <- function(frame, contrast, mu = 0, labels = NULL, 
   testMeansSubsets(moments, corrs, contrast, mu = mu, labels = labels, ...)
 }
 
-estimateMeansSubsets.formula <- function(formula, contrast, mu = 0, labels = NULL, ...) {
+testMeansSubsets.formula <- function(formula, contrast, mu = 0, labels = NULL, ...) {
   moments <- describeMoments(formula)
   testMeansSubsets(moments, contrast, mu = mu, labels = labels, ...)
 }

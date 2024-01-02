@@ -132,7 +132,7 @@ standardizeMeansSet.wsm <- standardizeMeansSet.bsm <- function(moments, mu = 0, 
 }
 
 standardizeMeansSet.data.frame <- function(frame, mu = 0, conf.level = .95, ...) {
-  moments <- describeMoments(data)
+  moments <- describeMoments(frame)
   standardizeMeansSet(moments, mu = mu, conf.level = conf.level)
 }
 

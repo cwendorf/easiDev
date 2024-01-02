@@ -27,7 +27,7 @@ print.easi <- function(x, ...) {
 construct <- function(..., class = "data") {
   if (class == "bsm" || class == "wsm") {
     results <- rbind(...)
-    class(results) <- class
+    class(results) <- c(class, "easi")
     comment(results) <- "Statistics for the Data"
   } else if (class == "data") {
     results <- data.frame(...)
@@ -35,7 +35,7 @@ construct <- function(..., class = "data") {
   } else if (class == "cor") {
     results <- rbind(...)
     colnames(results) <- rownames(results)
-    class(results) <- class
+    class(results) <- c(class, "easi")
     comment(results) <- "Correlations for the Data"
   }
   return(results)
