@@ -1,7 +1,6 @@
 # Estimation Approach to Statistical Inference
 ## Means
 
-
 ### Method Selector
 
 estimateMeans <- function(x, ..., contrast = NULL) {
@@ -15,8 +14,24 @@ estimateMeans <- function(x, ..., contrast = NULL) {
   }
 }
 
+
+plotMeans <- function(x, ..., contrast = NULL, connect = FALSE) {
+  desc <- describeMoments(x)
+  howmany <- nrow(desc)
+  if (class(desc) == "wsm") connect <- TRUE
+  if (!is.null(contrast)) {
+    plot(estimateMeansSubsets(x, ..., contrast = contrast), connect = connect)
+  } else if (howmany == 2) {
+    plot(estimateMeansComparison(x, ...), connect = connect)
+  } else {
+    plot(estimateMeansSet(x, ...), connect = connect)
+  }
+  invisible(eval(x))
+}
+
 plotMeans <- function(x, ..., contrast = NULL) {
   howmany <- nrow(describeMoments(x))
+  #print(class(describeMoments(x)))
   if (!is.null(contrast)) {
     plot(estimateMeansSubsets(x, ..., contrast = contrast), ...)
   } else if (howmany == 2) {
@@ -46,7 +61,7 @@ estimateMeansSet.wsm <- estimateMeansSet.bsm <- function(moments, conf.level = .
   results <- cbind(Est, SE, df, LL, UL)
   rownames(results) <- rownames(moments)
   comment(results) <- "Confidence Intervals for the Means"
-  class(results) <- "easi_main"
+  class(results) <- "intervalsMain"
   return(results)
 }
 
@@ -83,7 +98,7 @@ estimateMeansDifference.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   results <- cbind(Est, SE, df, LL, UL)
   rownames(results) <- "Comparison"
   comment(results) <- "Confidence Interval for the Difference of Means"
-  class(results) <- "easi_main"
+  class(results) <- "intervalsMain"
   return(results)
 }
 
@@ -101,7 +116,7 @@ estimateMeansDifference.bsm <- function(moments, conf.level = .95, mu = 0, ...) 
   results <- cbind(Est, SE, df, LL, UL)
   rownames(results) <- "Comparison"
   comment(results) <- "Confidence Interval for the Difference of Means"
-  class(results) <- "easi_main"
+  class(results) <- "intervalsMain"
   return(results)
 }
 
@@ -127,7 +142,7 @@ estimateMeansComparison.bsm <- function(moments, conf.level = .95, mu = 0, ...) 
   Diff <- estimateMeansDifference(moments, conf.level = conf.level, mu = 0, ...)
   results <- rbind(Levels, Diff)
   comment(results) <- "Confidence Intervals for the Comparison of Means"
-  class(results) <- "easi_comp"
+  class(results) <- "intervalsComp"
   return(results)
 }
 
@@ -136,7 +151,7 @@ estimateMeansComparison.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   Diff <- estimateMeansDifference(moments, corrs, conf.level = conf.level, mu = 0, ...)
   results <- rbind(Levels, Diff)
   comment(results) <- "Confidence Intervals for the Comparison of Means"
-  class(results) <- "easi_comp"
+  class(results) <- "intervalsComp"
   return(results)
 }
 
@@ -172,7 +187,7 @@ estimateMeansContrast.wsm <- function(moments, corrs, contrast, conf.level = .95
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
   comment(results) <- "Confidence Interval for the Contrast of Means"
-  class(results) <- "easi_main"
+  class(results) <- "intervalsMain"
   return(results)
 }
 
@@ -191,7 +206,7 @@ estimateMeansContrast.bsm <- function(moments, contrast, conf.level = .95, ...) 
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
   comment(results) <- "Confidence Interval for the Contrast of Means"
-  class(results) <- "easi_main"
+  class(results) <- "intervalsMain"
   return(results)
 }
 
@@ -226,7 +241,7 @@ estimateMeansSubsets.wsm <- function(moments, corrs, contrast, conf.level = .95,
   Diff <- estimateMeansContrast(moments, corrs, contrast = contrast, conf.level = conf.level)
   results <- rbind(Subsets, Diff)
   comment(results) <- "Confidence Intervals for the Subsets of Means"
-  class(results) <- "easi_comp"
+  class(results) <- "intervalsComp"
   return(results)
 }
 
@@ -244,7 +259,7 @@ estimateMeansSubsets.bsm <- function(moments, contrast, conf.level = .95, labels
   Diff <- estimateMeansContrast(moments, contrast = contrast, conf.level = conf.level)
   results <- rbind(Subsets, Diff)
   comment(results) <- "Confidence Intervals for the Subsets of Means"
-  class(results) <- "easi_comp"
+  class(results) <- "intervalsComp"
   return(results)
 }
 

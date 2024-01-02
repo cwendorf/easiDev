@@ -108,12 +108,12 @@
 
 ### Plot Methods
 
-plot.easi_main <- function(results, add = FALSE, ...) {
+plot.intervalsMain <- function(results, add = FALSE, ...) {
   if (!add) .plotMain(results, ...)
   .intervalsMain(results, ...)
 }
 
-plot.easi_comp <- function(results, add = FALSE, ...) {
+plot.intervalsComp <- function(results, add = FALSE, ...) {
   if (!add) .plotComp(results, ...)
   .intervalsComp(results, ...)
 }
