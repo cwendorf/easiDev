@@ -148,3 +148,74 @@ testMeansDifference.formula <- function(formula, mu = 0, labels = NULL, ...) {
   moments <- describeMoments(formula)
   testMeansDifference(moments,conf.level = conf.level, mu = mu, labels = labels)
 }
+
+### Standardize
+
+standardizeMeansDifference <- function(x, ...) {
+  UseMethod("standardizeMeansDifference")
+}
+
+standardizeMeansDifference.wsm <- function(moments, corrs, conf.level = .95, labels = NULL, ...) {
+  moments <- moments[1:2, ]
+  N <- min(moments[1:2, "N"])
+  M <- moments[1:2, "M"]
+  SD <- moments[1:2, "SD"]
+  rn <- rownames(moments)
+  R <- corrs[rn[1], rn[2]]
+  z <- qnorm((1 - conf.level) / 2, lower.tail = FALSE)
+  s <- sqrt((SD[1]^2 + SD[2]^2) / 2)
+  df <- N - 1
+  v1 <- SD[1]^2
+  v2 <- SD[2]^2
+  vd <- v1 + v2 - 2 * R * SD[1] * SD[2]
+  Est <- (M[2] - M[1]) / s
+  SE <- sqrt(Est^2 * (v1^2 + v2^2 + 2 * R^2 * v1 * v2) / (8 * df * s^4) + vd / (df * s^2))
+  LL <- Est - z * SE
+  UL <- Est + z * SE
+  results <- cbind(t(c(Est, SE, LL, UL)))
+  colnames(results) <- c("d", "SE", "LL", "UL")
+  if (is.null(labels)) {
+    rownames(results) <- c("Comparison")
+  } else {
+    rownames(results) <- labels
+  }
+  comment(results) <- "Confidence Interval for the Standardized Difference of Means"
+  class(results) <- c("easi", "intervalsMain")
+  return(results)
+}
+
+standardizeMeansDifference.bsm <- function(moments, conf.level = .95, labels = NULL, ...) {
+  moments <- moments[1:2, ]
+  N <- moments[1:2, "N"]
+  M <- moments[1:2, "M"]
+  SD <- moments[1:2, "SD"]
+  z <- qnorm((1 - conf.level) / 2, lower.tail = FALSE)
+  v1 <- SD[1]^2
+  v2 <- SD[2]^2
+  s <- sqrt((v1 + v2) / 2)
+  Est <- (M[2] - M[1]) / s
+  SE <- sqrt(Est^2 * (v1^2 / (N[1] - 1) + v2^2 / (N[2] - 1)) / (8 * s^4) + (v1 / (N[1] - 1) + v2 / (N[2] - 1)) / s^2)
+  LL <- Est - z * SE
+  UL <- Est + z * SE
+  results <- cbind(t(c(Est, SE, LL, UL)))
+  colnames(results) <- c("d", "SE", "LL", "UL")
+  if (is.null(labels)) {
+    rownames(results) <- c("Comparison")
+  } else {
+    rownames(results) <- labels
+  }
+  comment(results) <- "Confidence Interval for the Standardized Difference of Means"
+  class(results) <- c("easi", "intervalsMain")
+  return(results)
+}
+
+standardizeMeansDifference.data.frame <- function(frame, conf.level = .95, labels = NULL, ...) {
+  moments <- describeMoments(data)
+  corrs <- describeCorrelations(data)
+  standardizeMeansDifference.wsm(moments, corrs, conf.level = conf.level, labels = labels)
+}
+
+standardizeMeansDifference.formula <- function(formula, conf.level = .95, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  standardizeMeansDifference(moments, conf.level = conf.level, labels = labels)
+}

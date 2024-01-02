@@ -74,7 +74,7 @@ plotMeansContrast.wsm <- function(moments, corrs, contrast, add = FALSE, main = 
 
 plotMeansContrast.formula <- function(formula, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
   results <- estimateMeansContrast(formula, contrast = contrast, conf.level = conf.level, labels = labels)
-  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, cowssnnect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, cowsmnnect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
 plotMeansContrast.data.frame <- function(frame, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
@@ -145,4 +145,78 @@ testMeansContrast.data.frame <- function(frame, contrast, mu = 0, labels = NULL,
 testMeansContrast.formula <- function(formula, contrast, mu = 0, labels = NULL, ...) {
   moments <- describeMoments(formula)
   testMeansContrast(moments, contrast, mu = mu, labels = labels, ...)
+}
+
+### Standardize
+
+standardizeMeansContrast <- function(x, ...) {
+  UseMethod("standardizeMeansContrast")
+}
+
+standardizeMeansContrast.wsm <- function(moments, corrs, contrast, conf.level = .95, labels = NULL, ...) {
+  N <- min(moments[, "N"])
+  M <- moments[, "M"]
+  SD <- moments[, "SD"]
+  R <- mean(corrs[upper.tri(corrs)])
+  df <- N - 1
+  z <- qnorm((1 - conf.level) / 2, lower.tail = FALSE)
+  a <- length(M)
+  s <- sqrt(sum(SD^2) / a)
+  Est <- (t(contrast) %*% M) / s
+  v1 <- Est^2 / (2 * a^2 * s^4 * df)
+  v2 <- sum(SD^4)
+  v3 <- R^2 * t(SD^2) %*% SD^2
+  v4 <- sum(contrast^2 * SD^2)
+  v5 <- R * t(contrast * SD) %*% (contrast * SD)
+  SE <- sqrt(v1 * (v2 + v3) + (v4 - v5) / (df * s^2))
+  LL <- Est - z * SE
+  UL <- Est + z * SE
+  results <- cbind(t(c(Est, SE, LL, UL)))
+  colnames(results) <- c("Est", "SE", "LL", "UL")
+  if (is.null(labels)) {
+    rownames(results) <- c("Contrast")
+  } else {
+    rownames(results) <- labels
+  }
+  comment(results) <- "Confidence Interval for the Standardized Contrast of Means"
+  class(results) <- c("easi", "intervalsMain")
+  return(results)
+}
+
+standardizeMeansContrast.bsm <- function(moments, contrast, conf.level = .95, labels = NULL, ...) {
+  N <- moments[, "N"]
+  M <- moments[, "M"]
+  SD <- moments[, "SD"]
+  z <- qnorm((1 - conf.level) / 2, lower.tail = FALSE)
+  v <- SD^2
+  a <- length(M)
+  s <- sqrt(sum(v) / a)
+  Est <- (t(contrast) %*% M) / s
+  a1 <- Est^2 / (a^2 * s^4)
+  a2 <- a1 * sum((v^2 / (2 * (N - 1))))
+  a3 <- sum((contrast^2 * v / (N - 1))) / s^2
+  SE <- sqrt(a2 + a3)
+  LL <- Est - z * SE
+  UL <- Est + z * SE
+  results <- cbind(t(c(Est, SE, LL, UL)))
+  colnames(results) <- c("Est", "SE", "LL", "UL")
+  if (is.null(labels)) {
+    rownames(results) <- c("Contrast")
+  } else {
+    rownames(results) <- labels
+  }
+  comment(results) <- "Confidence Interval for the Standardized Contrast of Means"
+  class(results) <- c("easi", "intervalsMain")
+  return(results)
+}
+
+standardizeMeansContrast.default <- function(frame, contrast, conf.level = .95, labels = NULL, ...) {
+  moments <- describeMoments(data)
+  corrs <- describeCorrelations(data)
+  standardizeMeansContrast(moments, corrs, contrast, conf.level = conf.level, labels = labels)
+}
+
+standardizeMeansContrast.formula <- function(formula, contrast, conf.level = .95, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  standardizeMeansContrast(moments, contrast, conf.level = conf.level, labels = labels)
 }
