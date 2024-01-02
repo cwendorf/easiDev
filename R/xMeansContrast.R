@@ -74,7 +74,7 @@ plotMeansContrast.wsm <- function(moments, corrs, contrast, add = FALSE, main = 
 
 plotMeansContrast.formula <- function(formula, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = FALSE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
   results <- estimateMeansContrast(formula, contrast = contrast, conf.level = conf.level, labels = labels)
-  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, connect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
+  plot(results, add = add, main = main, xlab = xlab, ylab = ylab, ylim = ylim, values = values, rope = rope, digits = digits, cowssnnect = connect, pos = pos, pch = pch, col = col, offset = offset, intervals = intervals)
 }
 
 plotMeansContrast.data.frame <- function(frame, contrast, add = FALSE, main = NULL, ylab = "Mean Contrast", xlab = "", conf.level = .95, rope = NULL, labels = NULL, values = TRUE, pos = c(2, 2, 4), connect = TRUE, ylim = NULL, digits = 3, pch = 17, col = "black", offset = 0, intervals = TRUE) {
@@ -84,4 +84,65 @@ plotMeansContrast.data.frame <- function(frame, contrast, add = FALSE, main = NU
 
 addMeansContrast <- function(...) {
   plotMeansContrast(..., add = TRUE)
+}
+
+### Test
+
+testMeansContrast <- function(x, ...) {
+  UseMethod("testMeansContrast")
+}
+
+testMeansContrast.bsm <- function(moments, contrast, mu = 0, labels = NULL, ...) {
+  N <- moments[, "N"]
+  M <- moments[, "M"]
+  SD <- moments[, "SD"]
+  Est <- (t(contrast) %*% M) - mu
+  v <- diag(SD^2) %*% (solve(diag(N)))
+  SE <- sqrt(t(contrast) %*% v %*% contrast)
+  df <- (SE^4) / sum(((contrast^4) * (SD^4) / (N^2 * (N - 1))))
+  t <- Est / SE
+  p <- 2 * (1 - pt(abs(t), df))
+  results <- cbind(t(c(Est, SE, df, t, p)))
+  colnames(results) <- c("Est", "SE", "df", "t", "p")
+  if (is.null(labels)) {
+    rownames(results) <- c("Contrast")
+  } else {
+    rownames(results) <- labels
+  }
+  comment(results) <- "Hypothesis Test for the Contrast of Means"
+  class(results) <- c("easi")
+  return(results)
+}
+
+testMeansContrast.wsm <- function(moments, corrs, contrast, mu = 0, labels = NULL, ...) {
+  N <- min(moments[, "N"])
+  M <- moments[, "M"]
+  SD <- moments[, "SD"]
+  Est <- (t(contrast) %*% M) - mu
+  covstats <- .cortocov(corrs, SD)
+  SE <- sqrt(t(contrast) %*% covstats %*% contrast / N)
+  t <- Est / SE
+  df <- N - 1
+  p <- 2 * (1 - pt(abs(t), df))
+  results <- cbind(t(c(Est, SE, df, t, p)))
+  colnames(results) <- c("Est", "SE", "df", "t", "p")
+  if (is.null(labels)) {
+    rownames(results) <- c("Contrast")
+  } else {
+    rownames(results) <- labels
+  }
+  comment(results) <- "Hypothesis Test for the Contrast of Means"
+  class(results) <- c("easi")
+  return(results)
+}
+
+testMeansContrast.data.frame <- function(frame, contrast, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
+  testMeansContrast(moments, corrs, contrast, mu = mu, labels = labels, ...)
+}
+
+testMeansContrast.formula <- function(formula, contrast, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  testMeansContrast(moments, contrast, mu = mu, labels = labels, ...)
 }

@@ -83,3 +83,56 @@ plotMeansSubsets.data.frame <- function(frame, contrast, add = FALSE, main = NUL
 addMeansSubsets <- function(...) {
   plotMeansSubsets(..., add = TRUE)
 }
+
+### Test
+
+testMeansSubsets <- function(x, ...) {
+  UseMethod("testMeansSubsets")
+}
+
+teestMeansSubsets.wsm <- function(moments, corrs, contrast, mu = 0, labels = NULL, ...) {
+  con1 <- ifelse(contrast < 0, 0, contrast)
+  res1 <- estimateMeansContrast(moments, corrs, contrast = con1, mu = mu)
+  con2 <- ifelse(contrast > 0, 0, abs(contrast))
+  res2 <- estimateMeansContrast(moments, corrs, contrast = con2, mu = mu)
+  Subsets <- rbind(res2, res1)
+  if (is.null(labels)) {
+    rownames(Subsets) <- c("Neg Weighted", "Pos Weighted")
+  } else {
+    rownames(Subsets) <- labels
+  }
+  Diff <- testMeansContrast(moments, corrs, contrast = contrast, mu = mu)
+  results <- rbind(Subsets, Diff)
+  comment(results) <- "Hypothesis Tests for the Subsets of Means"
+  class(results) <- c("easi")
+  return(results)
+}
+
+testMeansSubsets.bsm <- function(moments, contrast, mu = 0, labels = NULL, ...) {
+  con1 <- ifelse(contrast < 0, 0, contrast)
+  res1 <- estimateMeansContrast(moments, contrast = con1, mu = mu)
+  con2 <- ifelse(contrast > 0, 0, abs(contrast))
+  res2 <- estimateMeansContrast(moments, contrast = con2, mu = mu)
+  Subsets <- rbind(res2, res1)
+  if (is.null(labels)) {
+    rownames(Subsets) <- c("Neg Weighted", "Pos Weighted")
+  } else {
+    rownames(Subsets) <- labels
+  }
+  Diff <- estimateMeansContrast(moments, contrast = contrast, mu = mu)
+  results <- rbind(Subsets, Diff)
+  comment(results) <- "Hypothesis Tests for the Subsets of Means"
+  class(results) <- c("easi")
+  return(results)
+}
+
+testMeansSubsets.data.frame <- function(frame, contrast, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
+  testMeansSubsets(moments, corrs, contrast, mu = mu, labels = labels, ...)
+}
+
+estimateMeansSubsets.formula <- function(formula, contrast, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  testMeansSubsets(moments, contrast, mu = mu, labels = labels, ...)
+}

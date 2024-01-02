@@ -14,16 +14,25 @@ estimateMeans <- function(x, ..., contrast = NULL) {
   }
 }
 
-plotMeans <- function(x, ..., contrast = NULL, connect = FALSE) {
-  desc <- describeMoments(x)
-  howmany <- nrow(desc)
-  if (any(class(desc) == "wsm")) connect <- TRUE
+plotMeans <- function(x, ..., contrast = NULL) {
+  howmany <- nrow(describeMoments(x))
   if (!is.null(contrast)) {
-    plot(estimateMeansSubsets(x, ..., contrast = contrast), connect = connect)
+    plotMeansSubsets(x, ..., contrast = contrast)
   } else if (howmany == 2) {
-    plot(estimateMeansComparison(x, ...), connect = connect)
+    plotMeansComparison(x, ...)
   } else {
-    plot(estimateMeansSet(x, ...), connect = connect)
+    plotMeansSet(x, ...)
   }
   invisible(eval(x))
+}
+
+testMeans <- function(x, ..., contrast = NULL) {
+  howmany <- nrow(describeMoments(x))
+  if (!is.null(contrast)) {
+    testMeansSubsets(x, ..., contrast = contrast)
+  } else if (howmany == 2) {
+    testMeansComparison(x, ...)
+  } else {
+    testMeansSet(x, ...)
+  }
 }

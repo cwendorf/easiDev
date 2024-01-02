@@ -65,3 +65,34 @@ plotMeansComparison.formula <- function(formula, add = FALSE, main = NULL, ylab 
 addMeansComparison <- function(...) {
   plotMeansComparison(..., add = TRUE)
 }
+
+### Test
+
+testMeansComparison.bsm <- function(moments, mu = 0, ...) {
+  Levels <- testMeansSet(moments, mu = 0, ...)
+  Diff <- testMeansDifference(moments, mu = 0, ...)
+  results <- rbind(Levels, Diff)
+  comment(results) <- "Hypothesis Tests for the Comparison of Means"
+  class(results) <- c("easi")
+  return(results)
+}
+
+testMeansComparison.wsm <- function(moments, corrs, mu = 0, ...) {
+  Levels <- testMeansSet(moments, corrs, mu = 0, ...)
+  Diff <- testMeansDifference(moments, corrs, mu = 0, ...)
+  results <- rbind(Levels, Diff)
+  comment(results) <- "Hypothesis Tests for the Comparison of Means"
+  class(results) <- c("easi")
+  return(results)
+}
+
+testMeansComparison.data.frame <- function(frame, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
+  testMeansComparison(moments, corrs, mu = 0, labels = labels, ...)
+}
+
+testMeansComparison.formula <- function(formula, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  testMeansComparison(moments, mu = 0, labels = labels, ...)
+}

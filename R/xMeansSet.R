@@ -55,3 +55,34 @@ plotMeansSet.bsm <- plotMeansSet.formula <- function(..., conf.level = .95, mu =
 addMeansSet <- function(...) {
   plotMeansSet(..., add = TRUE)
 }
+
+### Test
+
+testMeansSet <- function(x, ...) {
+  UseMethod("testMeansSet")
+}
+
+testMeansSet.wsm <- testMeansSet.bsm <- function(moments, mu = 0, ...) {
+  N <- moments[, "N"]
+  M <- moments[, "M"]
+  SE <- moments[, "SD"] / sqrt(N)
+  Diff <- M - mu
+  t <- Diff / SE
+  df <- N - 1
+  p <- 2 * (1 - pt(abs(t), df))
+  results <- cbind(Diff = Diff, SE = SE, df = df, t = t, p = p)
+  rownames(results) <- rownames(moments)
+  comment(results) <- "Hypothesis Tests for the Means"
+  class(results) <- c("easi")
+  return(results)
+}
+
+testMeansSet.data.frame <- function(frame, mu = 0, ...) {
+  moments <- describeMoments(frame)
+  testMeansSet(moments, mu = mu, ...)
+}
+
+testMeansSet.formula <- function(formula, mu = 0, ...) {
+  moments <- describeMoments(formula)
+  testMeansSet(moments, mu = mu, ...)
+}

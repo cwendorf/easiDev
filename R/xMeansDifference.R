@@ -86,3 +86,65 @@ plotMeansDifference.data.frame <- function(frame, add = FALSE, main = NULL, ylab
 addMeansDifference <- function(...) {
   plotMeansDifference(..., add = TRUE)
 }
+
+### Test
+
+testMeansDifference <- function(x, ...) {
+  UseMethod("testMeansDifference")
+}
+
+testMeansDifference.wsm <- function(moments, corrs, mu = 0, labels = NULL, ...) {
+  moments <- moments[1:2, ]
+  N <- moments[, "N"]
+  M <- moments[, "M"]
+  SD <- moments[, "SD"]
+  rn <- rownames(moments)
+  R <- corrs[rn[1], rn[2]]
+  MD <- M[2] - M[1] - mu
+  SE <- SD / sqrt(N)
+  SE <- sqrt(SE[1]^2 + SE[2]^2 - 2 * R * SE[1] * SE[2])
+  df <- min(N) - 1
+  t <- MD / SE
+  p <- 2 * (1 - pt(abs(t), df))
+  results <- cbind(Diff = MD, SE = SE, df = df, t = t, p = p)
+  if (is.null(labels)) {
+    rownames(results) <- c("Comparison")
+  } else {
+    rownames(results) <- labels
+  }
+  comment(results) <- "Hypothesis Test for the Difference of Means"
+  class(results) <- c("easi")
+  return(results)
+}
+
+testMeansDifference.bsm <- function(moments, mu = 0, labels = NULL, ...) {
+  moments <- moments[1:2, ]
+  N <- moments[, "N"]
+  M <- moments[, "M"]
+  SD <- moments[, "SD"]
+  MD <- M[2] - M[1] - mu
+  SE <- sqrt((SD[1]^2 / N[1]) + (SD[2]^2 / N[2]))
+  df <- ((SD[1]^2 / N[1] + SD[2]^2 / N[2])^2) / ((SD[1]^2 / N[1])^2 / (N[1] - 1) + (SD[2]^2 / N[2])^2 / (N[2] - 1))
+  t <- MD / SE
+  p <- 2 * (1 - pt(abs(t), df))
+  results <- cbind(Diff = MD, SE = SE, df = df, t = t, p = p)
+  if (is.null(labels)) {
+    rownames(results) <- c("Comparison")
+  } else {
+    rownames(results) <- labels
+  }
+  comment(results) <- "Hypothesis Test for the Difference of Means"
+  class(results) <- c("easi")
+  return(results)
+}
+
+testMeansDifference.data.frame <- function(frame, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(frame)
+  corrs <- describeCorrelations(frame)
+  testMeansDifference(moments, corrs, conf.level = conf.level, mu = mu, labels = labels)
+}
+
+testMeansDifference.formula <- function(formula, mu = 0, labels = NULL, ...) {
+  moments <- describeMoments(formula)
+  testMeansDifference(moments,conf.level = conf.level, mu = mu, labels = labels)
+}
