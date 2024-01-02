@@ -36,3 +36,14 @@ testMeans <- function(x, ..., contrast = NULL) {
     testMeansSet(x, ...)
   }
 }
+
+standardizeMeans <- function(x, ..., contrast = NULL) {
+  howmany <- nrow(describeMoments(x))
+  if (!is.null(contrast)) {
+    standardizeMeansContrast(x, ..., contrast = contrast)
+  } else if (howmany == 2) {
+    standardizeMeansDifference(x, ...)
+  } else {
+    standardizeMeansSet(x, ...)
+  }
+}
