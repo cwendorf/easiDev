@@ -14,14 +14,13 @@
 
 ### Print
 
-print.bsm <- print.wsm <- print.intervalsMain <- print.intervalsComp <- print.cor <- function(x, ...) {
+print.easi <- function(x, ...) {
   cat("\n", comment(x), "\n\n", sep = "")
   m <- unclass(x)
   print(.formatFrame(m, ...))
   cat("\n", sep = "")
   invisible(x)
 }
-
 
 ### Construction
 

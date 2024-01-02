@@ -106,8 +106,6 @@
   }
 }
 
-### Plot Methods
-
 plot.intervalsMain <- function(results, add = FALSE, ...) {
   if (!add) .plotMain(results, ...)
   .intervalsMain(results, ...)

@@ -1,35 +1,6 @@
 # Estimation Approach to Statistical Inference
 ## Correlations
 
-### Describe
-
-describeCorrelations <- function(x, ...) {
-  UseMethod("describeCorrelations")
-}
-
-describeCorrelations.data.frame <- function(frame, ...) {
-  results <- cor(frame)
-  class(results) <- "cor"
-  comment(results) <- "Correlations for the Data"
-  return(results)
-}
-
-describeCorrelations.cor <- function(cor, ...) {
-  return(cor)
-}
-
-describeCorrelations.wsm <- function(wsm, cor, ...) {
-  return(cor)
-}
-
-### Covariances
-
-.cortocov <- function(corrs, SD) {
-  sdsquare <- SD %*% t(SD)
-  covstats <- sdsquare * corrs
-  return(covstats)
-}
-
 ### Corrrelations
 
 estimateCorrelations <- function(x, ...) {
@@ -62,7 +33,7 @@ estimateCorrelations.wsm <- function(moments, corrs, conf.level = .95, ...) {
   }
   results <- as.matrix(results)
   comment(results) <- "Confidence Intervals for the Correlations"
-  class(results) <- "cor"
+  class(results) <- c("easi", "cor")
   return(results)
 }
 
