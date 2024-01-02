@@ -18,11 +18,11 @@ estimateMeans <- function(x, ..., contrast = NULL) {
 plotMeans <- function(x, ..., contrast = NULL) {
   howmany <- nrow(describeMoments(x))
   if (!is.null(contrast)) {
-    plot(estimateMeansSubsets(x, ..., contrast = contrast))
+    plot(estimateMeansSubsets(x, ..., contrast = contrast), ...)
   } else if (howmany == 2) {
-    plot(estimateMeansComparison(x, ...))
+    plot(estimateMeansComparison(x, ...), ...)
   } else {
-    plot(estimateMeansSet(x, ...))
+    plot(estimateMeansSet(x, ...), ...)
   }
   invisible(eval(x))
 }
@@ -225,7 +225,7 @@ estimateMeansSubsets.wsm <- function(moments, corrs, contrast, conf.level = .95,
   }
   Diff <- estimateMeansContrast(moments, corrs, contrast = contrast, conf.level = conf.level)
   results <- rbind(Subsets, Diff)
-  comments(results) <- "Confidence Intervals for the Subsets of Means"
+  comment(results) <- "Confidence Intervals for the Subsets of Means"
   class(results) <- "easi_comp"
   return(results)
 }

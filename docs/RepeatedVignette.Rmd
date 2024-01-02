@@ -41,15 +41,19 @@ Outcome3 <- c(9, 16, 11, 12, 15, 13, 9, 14, 11, 10)
 RepeatedData <- construct(Outcome1, Outcome2, Outcome3)
 ```
 
+Extra titles don't work
+Connecting lines don't work
 ```{r}
 (RepeatedData)
-(RepeatedData) |> describeMoments() |> view()
+(RepeatedData) |> describeMoments()
 (RepeatedData) |> describeMoments() |> print(digits=2,width=10,main="tough")
-(RepeatedData) |> describeCorrelations() |> print(digits=6)
+(RepeatedData) |> describeCorrelations()
+(RepeatedData) |> describeCorrelations() |> print(digits=1)
 
 (RepeatedData) |> estimateMeans()
+(RepeatedData) |> plotMeans()
 
-(RepeatedData) |> focus(Outcome1, Outcome2) |> estimateMeans() |> print(digits=6,main=c("cool","cooler"))
+(RepeatedData) |> focus(Outcome1, Outcome2) |> estimateMeans() |> print(digits=6,main="cool")
 (RepeatedData) |> focus(Outcome1, Outcome2) |> plotMeans(main="cool",digits=6)
 (RepeatedData) |> focus(Outcome1, Outcome2) |> estimateMeans() |> plot(digits=6)
 
@@ -60,17 +64,13 @@ RepeatedData <- construct(Outcome1, Outcome2, Outcome3)
 
 ```{R}
 (RepeatedData) |> describeCorrelations() |> print(digits=6)
-(RepeatedData) |> estimateCorrelations() |> .deList()
+(RepeatedData) |> estimateCorrelations()
 
 (RepeatedData) |> estimateCorrelations() |> print(digits=6, width=10, main = "cools")
 (RepeatedData) |> estimateCorrelations() |> plot()
 
 ```
 
-```{r}
-
-(RepeatedData) |> estimateMeans() |> print(digits=0)
-```
 
 ## Repeated Summary
 
@@ -118,5 +118,12 @@ RepeatedCorr <- construct(Outcome1, Outcome2, Outcome3, class = "cor")
 
 (RepeatedSummary) |> describeMoments() |> plotMeans(RepeatedCorr, contrast = c(-1, .5, .5))
 (RepeatedSummary) |> describeMoments() |> estimateMeans(RepeatedCorr, contrast = c(-1, .5, .5)) |> plot()
+
+```
+
+
+```{r}
+(RepeatedSummary) |> describeMoments() |> estimateCorrelations(RepeatedCorr)
+(RepeatedSummary) |> estimateCorrelations(RepeatedCorr)
 
 ```

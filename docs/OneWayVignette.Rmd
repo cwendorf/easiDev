@@ -43,36 +43,16 @@ OneWayData <- construct(Factor, Outcome)
 ```
 
 ```{r}
-
-plot.easi_main <- function(results, add = FALSE, ...) {
-  if (!add) .plotMain(results, ...)
-  .intervalsMain(results, ...)
-}
-
-plot.easi_comp <- function(results, add = FALSE, ...) {
-  if (!add) .plotComp(results, ...)
-  .intervalsComp(results, ...)
-}
-
-```
-
-
-```{r}
-
 (Outcome~Factor) |> describeMoments()
-(Outcome~Factor) |> estimateMeans()
-(Outcome~Factor) |> estimateMeans() |> plot()
 
-(Outcome~Factor) |> focus(Level1, Level2) |> estimateMeans()
+(Outcome~Factor) |> focus(Level1, Level2, Level3) |> estimateMeans()
+(Outcome~Factor) |> focus(Level1, Level2, Level3) |> plotMeans()
 (Outcome~Factor) |> focus(Level1, Level2) |> estimateMeans() |> plot()
-(Outcome~Factor) |> focus(Level1, Level2) |> plotMeans()
-
-(Outcome~Factor) |> estimateMeansSubsets(contrast=c(-1, .5, .5))
+(Outcome~Factor) |> estimateMeans(contrast=c(-1, .5, .5))
 (Outcome~Factor) |> estimateMeans(contrast=c(-1, .5, .5),labels=c("neg","pos")) |> plot(main="Cool",digits=1,xlab="time")
-
+(Outcome~Factor) |> plotMeans(contrast=c(-1, .5, .5),labels=c("neg","pos"))
 
 ```
-
 
 ```{r}
 
@@ -101,7 +81,7 @@ OneWaySummary <- construct(Level1, Level2, Level3, class = "bsm")
 (OneWaySummary)
 (OneWaySummary) |> print(digits=4,width=12)
 
-(OneWaySummary) |> estimateMeans(mu=3)
+(OneWaySummary) |> estimateMeansSet()
 (OneWaySummary) |> plotMeans(line=9,main="title",values=FALSE)
 (OneWaySummary) |> focus(Level1, Level2) |> estimateMeans(conf.level=.99, mu =3)
 (OneWaySummary) |> focus(Level1, Level2) |> estimateMeans() |> plot(main="title")

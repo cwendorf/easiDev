@@ -8,9 +8,10 @@ describeCorrelations <- function(x, ...) {
 }
 
 describeCorrelations.data.frame <- function(frame, ...) {
-  output <- cor(frame)
-  class(output) <- "cor"
-  return(output)
+  results <- cor(frame)
+  class(results) <- "cor"
+  comment(results) <- "Correlations for the Data"
+  return(results)
 }
 
 describeCorrelations.cor <- function(cor, ...) {
@@ -19,11 +20,6 @@ describeCorrelations.cor <- function(cor, ...) {
 
 describeCorrelations.wsm <- function(wsm, cor, ...) {
   return(cor)
-}
-
-describeCorrelations.list <- function(list, ...) {
-  results <- lapply(list, describeCorrelations.cor)
-  return(results)
 }
 
 ### Covariances
@@ -45,7 +41,7 @@ estimateCorrelations.wsm <- function(moments, corrs, conf.level = .95, ...) {
   rn <- rownames(moments)
   nr <- nrow(moments)
   ncomp <- (nr) * (nr - 1) / 2
-  results <- data.frame(matrix(ncol = 4, nrow = ncomp))
+  results <- as.data.frame(matrix(ncol = 4, nrow = ncomp))
   colnames(results) <- c("R", "SE", "LL", "UL")
   comp <- 1
   for (i in 1:(nr - 1)) {
@@ -64,10 +60,10 @@ estimateCorrelations.wsm <- function(moments, corrs, conf.level = .95, ...) {
       comp <- comp + 1
     }
   }
-  output <- list(results)
-  names(output) <- "Confidence Intervals for the Correlations"
-  class(output) <- c("easi")
-  return(output)
+  results <- as.matrix(results)
+  comment(results) <- "Confidence Intervals for the Correlations"
+  class(results) <- "cor"
+  return(results)
 }
 
 estimateCorrelations.data.frame <- function(frame, conf.level = .95, ...) {
