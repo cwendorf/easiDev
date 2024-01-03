@@ -68,6 +68,10 @@ addMeansComparison <- function(...) {
 
 ### Test
 
+testMeansComparison <- function(x, ...) {
+  UseMethod("testMeansComparison")
+}
+
 testMeansComparison.bsm <- function(moments, mu = 0, ...) {
   Levels <- testMeansSet(moments, mu = 0, ...)
   Diff <- testMeansDifference(moments, mu = 0, ...)
