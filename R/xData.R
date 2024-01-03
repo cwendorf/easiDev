@@ -1,7 +1,7 @@
 # Estimation Approach to Statistical Inference
 ## Data
 
-### Modified stripchart
+### Modified Stripchart
 
 dataChart <- function(x, ...) {
   UseMethod("dataChart")
@@ -116,7 +116,7 @@ dataChart.formula <- function(x, data = NULL, dlab = NULL, ..., subset, na.actio
   dataChart(split(mf[[response]], mf[-response]), dlab = dlab, ...)
 }
 
-### Data Plot
+### Plot
 
 plotData <- function(x, ...) {
   UseMethod("plotData")
