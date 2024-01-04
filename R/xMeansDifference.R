@@ -22,9 +22,9 @@ estimateMeansDifference.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   LL <- Est - tcrit * SE
   UL <- Est + tcrit * SE
   results <- cbind(Est, SE, df, LL, UL)
-  rownames(results) <- "Comparison"
+  rownames(results) <- intervals.comparison
   comment(results) <- "Confidence Interval for the Mean Difference"
-  class(results) <- c("easi", "intervals")
+  class(results) <- c("easi", "intervals.main")
   return(results)
 }
 
@@ -40,9 +40,9 @@ estimateMeansDifference.bsm <- function(moments, conf.level = .95, mu = 0, ...) 
   LL <- Est - tcrit * SE
   UL <- Est + tcrit * SE
   results <- cbind(Est, SE, df, LL, UL)
-  rownames(results) <- "Comparison"
+  rownames(results) <- intervals.comparison
   comment(results) <- "Confidence Interval for the Mean Difference"
-  class(results) <- c("easi", "intervals")
+  class(results) <- c("easi", "intervals.main")
   return(results)
 }
 
@@ -108,7 +108,7 @@ testMeansDifference.wsm <- function(moments, corrs, mu = 0, labels = NULL, ...) 
   p <- 2 * (1 - pt(abs(t), df))
   results <- cbind(Diff = MD, SE = SE, df = df, t = t, p = p)
   if (is.null(labels)) {
-    rownames(results) <- c("Comparison")
+    rownames(results) <- c(intervals.comparison)
   } else {
     rownames(results) <- labels
   }
@@ -175,12 +175,12 @@ standardizeMeansDifference.wsm <- function(moments, corrs, conf.level = .95, lab
   results <- cbind(t(c(Est, SE, LL, UL)))
   colnames(results) <- c("d", "SE", "LL", "UL")
   if (is.null(labels)) {
-    rownames(results) <- c("Comparison")
+    rownames(results) <- c(intervals.comparison)
   } else {
     rownames(results) <- labels
   }
   comment(results) <- "Confidence Interval for the Standardized Mean Difference"
-  class(results) <- c("easi", "intervals")
+  class(results) <- c("easi", "intervals.main")
   return(results)
 }
 
@@ -200,12 +200,12 @@ standardizeMeansDifference.bsm <- function(moments, conf.level = .95, labels = N
   results <- cbind(t(c(Est, SE, LL, UL)))
   colnames(results) <- c("d", "SE", "LL", "UL")
   if (is.null(labels)) {
-    rownames(results) <- c("Comparison")
+    rownames(results) <- c(intervals.comparison)
   } else {
     rownames(results) <- labels
   }
   comment(results) <- "Confidence Interval for the Standardized Mean Difference"
-  class(results) <- c("easi", "intervals")
+  class(results) <- c("easi", "intervals.main")
   return(results)
 }
 

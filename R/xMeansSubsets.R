@@ -21,7 +21,7 @@ estimateMeansSubsets.wsm <- function(moments, corrs, contrast, conf.level = .95,
   Diff <- estimateMeansContrast(moments, corrs, contrast = contrast, conf.level = conf.level)
   results <- rbind(Subsets, Diff)
   comment(results) <- "Confidence Intervals for the Mean Subsets"
-  class(results) <- c("easi", "comparison")
+  class(results) <- c("easi", "intervals.comp")
   return(results)
 }
 
@@ -39,7 +39,7 @@ estimateMeansSubsets.bsm <- function(moments, contrast, conf.level = .95, labels
   Diff <- estimateMeansContrast(moments, contrast = contrast, conf.level = conf.level)
   results <- rbind(Subsets, Diff)
   comment(results) <- "Confidence Intervals for the Mean Subsets"
-  class(results) <- c("easi", "comparison")
+  class(results) <- c("easi", "intervals.comp")
   return(results)
 }
 

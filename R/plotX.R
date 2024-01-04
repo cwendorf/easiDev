@@ -1,7 +1,7 @@
 # Estimation Approach to Statistical Inference
 ## Plot
 
-### Color Transformations
+### Color
 
 .colorTransparent <- function(someColor, alpha = 100) {
   newColor <- col2rgb(someColor)
@@ -19,11 +19,10 @@
   })
 }
 
-### Initialize Plots
+### Initialize
 
-.plotMain <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, ...) {
+.plotMain <- function(results, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, ...) {
   if (is.null(main)) main <- comment(results)
-  results <- results[, c(1, 4, 5), drop = FALSE]
   main <- paste(strwrap(main, width = 0.7 * getOption("width")), collapse = "\n")
   if (is.null(ylim)) ylim <- range(pretty(c(floor(min(results) - .5), ceiling(max(results) + .5))))
   par(mar = c(5, 5, 5, 3))
@@ -31,7 +30,7 @@
   axis(1, seq_len(nrow(results)), row.names(results))
 }
 
-.plotComp <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = "Difference", ...) {
+.plotComp <- function(results, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = "Difference", ...) {
   if (is.null(main)) main <- comment(results)
   results <- results[, c(1, 4, 5)]
   main <- paste(strwrap(main, width = 0.7 * getOption("width")), collapse = "\n")
@@ -59,9 +58,10 @@
   mtext(slab, side = 4, las = 3, cex = 1.15, line = 3)
 }
 
-### Interval Plots
+### Intervals
 
-.intervals <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = 2, pch = 16, col = "black", offset = 0, points = TRUE, intervals = TRUE, ...) {
+plot.intervals.main <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = 2, pch = 16, col = "black", offset = 0, points = TRUE, intervals = TRUE, ...) {
+  if (!add) .plotMain(results, main, ylab, xlab, ylim)
   results <- results[, c(1, 4, 5), drop = FALSE]
   if (points) points(seq_len(nrow(results)) + offset, results[, 1], pch = pch, cex = 1.5, col = col, lwd = 2, bg = .colorIntensity(col, .6))
   if (intervals) arrows(seq_len(nrow(results)) + offset, results[, 2], seq_len(nrow(results)) + offset, results[, 3], col = col, lwd = 2, length = 0)
@@ -84,7 +84,8 @@
   }
 }
 
-.comparison <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = c(2, 2, 4), pch = c(15, 15, 17), col = "black", offset = 0, points = TRUE, intervals = TRUE, lines = TRUE, ...) {
+plot.intervals.comp <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = c(2, 2, 4), pch = c(15, 15, 17), col = "black", offset = 0, points = TRUE, intervals = TRUE, lines = TRUE, ...) {
+  if (!add) .plotComp(results, main, ylab, xlab, ylim, slab)
   results <- results[, c(1, 4, 5)]
   graph <- results
   graph[3, ] <- results[3, ] + results[1, 1]
@@ -104,14 +105,4 @@
     text(1:3 + offset, graph[, 2], results[, 2], cex = .8, pos = pos, offset = .5, col = col)
     text(1:3 + offset, graph[, 3], results[, 3], cex = .8, pos = pos, offset = .5, col = col)
   }
-}
-
-plot.intervals <- function(results, add = FALSE, ...) {
-  if (!add) .plotMain(results, ...)
-  .intervals(results, ...)
-}
-
-plot.comparison <- function(results, add = FALSE, ...) {
-  if (!add) .plotComp(results, ...)
-  .comparison(results, ...)
 }
