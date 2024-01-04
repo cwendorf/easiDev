@@ -21,7 +21,7 @@
 
 ### Initialize
 
-.plotMain <- function(results, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, ...) {
+plot.main <- function(results, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, ...) {
   if (is.null(main)) main <- comment(results)
   main <- paste(strwrap(main, width = 0.7 * getOption("width")), collapse = "\n")
   if (is.null(ylim)) ylim <- range(pretty(c(floor(min(results) - .5), ceiling(max(results) + .5))))
@@ -32,7 +32,6 @@
 
 .plotComp <- function(results, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = "Difference", ...) {
   if (is.null(main)) main <- comment(results)
-  results <- results[, c(1, 4, 5)]
   main <- paste(strwrap(main, width = 0.7 * getOption("width")), collapse = "\n")
   graph <- results
   graph[3, ] <- results[3, ] + results[1, 1]
@@ -61,8 +60,10 @@
 ### Intervals
 
 plot.intervals.main <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = 2, pch = 16, col = "black", offset = 0, points = TRUE, intervals = TRUE, ...) {
-  if (!add) .plotMain(results, main, ylab, xlab, ylim)
+  if (is.null(main)) main <- comment(results)
   results <- results[, c(1, 4, 5), drop = FALSE]
+  comment(results) <- main
+  if (!add) plot.main(results, main, ylab, xlab, ylim)
   if (points) points(seq_len(nrow(results)) + offset, results[, 1], pch = pch, cex = 1.5, col = col, lwd = 2, bg = .colorIntensity(col, .6))
   if (intervals) arrows(seq_len(nrow(results)) + offset, results[, 2], seq_len(nrow(results)) + offset, results[, 3], col = col, lwd = 2, length = 0)
   if (connect) {
@@ -85,8 +86,10 @@ plot.intervals.main <- function(results, add = FALSE, main = NULL, ylab = "Outco
 }
 
 plot.intervals.comp <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = c(2, 2, 4), pch = c(15, 15, 17), col = "black", offset = 0, points = TRUE, intervals = TRUE, lines = TRUE, ...) {
-  if (!add) .plotComp(results, main, ylab, xlab, ylim, slab)
+  if (is.null(main)) main <- comment(results)
   results <- results[, c(1, 4, 5)]
+  comment(results) <- main
+  if (!add) .plotComp(results, main, ylab, xlab, ylim, slab)
   graph <- results
   graph[3, ] <- results[3, ] + results[1, 1]
   if (points) points(1:3 + offset, graph[, 1], pch = pch, cex = 1.5, col = col, lwd = 2, bg = .colorIntensity(col, .6))

@@ -133,7 +133,7 @@ plotData.data.frame <- function(frame, add = FALSE, main = NULL, ylim = NULL, yl
       main <- "Data for the Variables"
     }
     results <- describePercentiles(data)
-    .plotMain(results, main = main, ylab = ylab, xlab = xlab, ylim = ylim)
+    plot.main(results, main = main, ylab = ylab, xlab = xlab, ylim = ylim)
   }
   dataChart(data, add = TRUE, at = loc, vertical = TRUE, method = method, jitter = jitter, col = .colorTransparent(col, 70), pch = pch)
   if (connect && method != "jitter") {
@@ -151,7 +151,7 @@ plotData.formula <- function(formula, add = FALSE, main = NULL, ylim = NULL, yla
     if (is.null(main)) {
       main <- "Data for the Groups"
     }
-    .plotMain(results, main = main, ylab = ylab, xlab = xlab, ylim = ylim)
+    plot.main(results, main = main, ylab = ylab, xlab = xlab, ylim = ylim)
   }
   loc <- (1:nrow(results)) + offset
   dataChart(formula, add = TRUE, at = loc, vertical = TRUE, method = method, jitter = jitter, col = .colorTransparent(col, 70), pch = pch)

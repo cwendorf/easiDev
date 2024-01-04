@@ -22,7 +22,7 @@ estimateMeansDifference.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   LL <- Est - tcrit * SE
   UL <- Est + tcrit * SE
   results <- cbind(Est, SE, df, LL, UL)
-  rownames(results) <- intervals.comparison
+  rownames(results) <- "Comparison"
   comment(results) <- "Confidence Interval for the Mean Difference"
   class(results) <- c("easi", "intervals.main")
   return(results)
@@ -40,7 +40,7 @@ estimateMeansDifference.bsm <- function(moments, conf.level = .95, mu = 0, ...) 
   LL <- Est - tcrit * SE
   UL <- Est + tcrit * SE
   results <- cbind(Est, SE, df, LL, UL)
-  rownames(results) <- intervals.comparison
+  rownames(results) <- "Comparison"
   comment(results) <- "Confidence Interval for the Mean Difference"
   class(results) <- c("easi", "intervals.main")
   return(results)
