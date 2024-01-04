@@ -60,7 +60,7 @@ estimateCorrelations.wsm <- function(moments, corrs, conf.level = .95, ...) {
   }
   results <- as.matrix(results)
   comment(results) <- "Confidence Intervals for the Correlations"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 

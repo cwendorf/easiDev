@@ -61,7 +61,7 @@
 
 ### Interval Plots
 
-.intervalsMain <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = 2, pch = 16, col = "black", offset = 0, points = TRUE, intervals = TRUE, ...) {
+.intervals <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, line = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = 2, pch = 16, col = "black", offset = 0, points = TRUE, intervals = TRUE, ...) {
   results <- results[, c(1, 4, 5), drop = FALSE]
   if (points) points(seq_len(nrow(results)) + offset, results[, 1], pch = pch, cex = 1.5, col = col, lwd = 2, bg = .colorIntensity(col, .6))
   if (intervals) arrows(seq_len(nrow(results)) + offset, results[, 2], seq_len(nrow(results)) + offset, results[, 3], col = col, lwd = 2, length = 0)
@@ -84,7 +84,7 @@
   }
 }
 
-.intervalsComp <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = c(2, 2, 4), pch = c(15, 15, 17), col = "black", offset = 0, points = TRUE, intervals = TRUE, lines = TRUE, ...) {
+.comparison <- function(results, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = NULL, rope = NULL, values = TRUE, digits = 3, connect = FALSE, pos = c(2, 2, 4), pch = c(15, 15, 17), col = "black", offset = 0, points = TRUE, intervals = TRUE, lines = TRUE, ...) {
   results <- results[, c(1, 4, 5)]
   graph <- results
   graph[3, ] <- results[3, ] + results[1, 1]
@@ -106,12 +106,12 @@
   }
 }
 
-plot.intervalsMain <- function(results, add = FALSE, ...) {
+plot.intervals <- function(results, add = FALSE, ...) {
   if (!add) .plotMain(results, ...)
-  .intervalsMain(results, ...)
+  .intervals(results, ...)
 }
 
-plot.intervalsComp <- function(results, add = FALSE, ...) {
+plot.comparison <- function(results, add = FALSE, ...) {
   if (!add) .plotComp(results, ...)
-  .intervalsComp(results, ...)
+  .comparison(results, ...)
 }

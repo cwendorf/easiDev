@@ -12,7 +12,7 @@ estimateMeansComparison.bsm <- function(moments, conf.level = .95, mu = 0, ...) 
   Diff <- estimateMeansDifference(moments, conf.level = conf.level, mu = 0, ...)
   results <- rbind(Levels, Diff)
   comment(results) <- "Confidence Intervals for the Mean Comparison"
-  class(results) <- c("easi", "intervalsComp")
+  class(results) <- c("easi", "comparison")
   return(results)
 }
 
@@ -21,7 +21,7 @@ estimateMeansComparison.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   Diff <- estimateMeansDifference(moments, corrs, conf.level = conf.level, mu = 0, ...)
   results <- rbind(Levels, Diff)
   comment(results) <- "Confidence Intervals for the Mean Comparison"
-  class(results) <- c("easi", "intervalsComp")
+  class(results) <- c("easi", "comparison")
   return(results)
 }
 

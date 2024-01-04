@@ -22,7 +22,7 @@ estimateMeansContrast.wsm <- function(moments, corrs, contrast, conf.level = .95
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
   comment(results) <- "Confidence Interval for the Mean Contrast"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 
@@ -41,7 +41,7 @@ estimateMeansContrast.bsm <- function(moments, contrast, conf.level = .95, ...) 
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
   comment(results) <- "Confidence Interval for the Mean Contrast"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 
@@ -179,7 +179,7 @@ standardizeMeansContrast.wsm <- function(moments, corrs, contrast, conf.level = 
     rownames(results) <- labels
   }
   comment(results) <- "Confidence Interval for the Standardized Mean Contrast"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 
@@ -206,7 +206,7 @@ standardizeMeansContrast.bsm <- function(moments, contrast, conf.level = .95, la
     rownames(results) <- labels
   }
   comment(results) <- "Confidence Interval for the Standardized Mean Contrast"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 

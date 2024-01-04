@@ -20,7 +20,7 @@ estimateMeansSet.wsm <- estimateMeansSet.bsm <- function(moments, conf.level = .
   results <- cbind(Est, SE, df, LL, UL)
   rownames(results) <- rownames(moments)
   comment(results) <- "Confidence Intervals for the Means"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 
@@ -127,7 +127,7 @@ standardizeMeansSet.wsm <- standardizeMeansSet.bsm <- function(moments, mu = 0, 
   results <- cbind(d = CD, SE = SE, LL = LL, UL = UL)
   rownames(results) <- rownames(moments)
   comment(results) <- "Confidence Intervals for the Standardized Means"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 

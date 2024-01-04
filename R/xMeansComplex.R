@@ -20,7 +20,7 @@ estimateMeansComplex.default <- estimateMeansComplex.formula <- estimateMeansCom
   Diff <- estimateMeansContrast(..., contrast = contrast, conf.level = conf.level)
   results <- rbind(Complex, Diff)
   comment(results) <- "Confidence Intervals for the Mean Contrasts"
-  class(results) <- c("easi", "intervalsComp")
+  class(results) <- c("easi", "comparison")
   return(results)
 }
 

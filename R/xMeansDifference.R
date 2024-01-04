@@ -24,7 +24,7 @@ estimateMeansDifference.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   results <- cbind(Est, SE, df, LL, UL)
   rownames(results) <- "Comparison"
   comment(results) <- "Confidence Interval for the Mean Difference"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 
@@ -42,7 +42,7 @@ estimateMeansDifference.bsm <- function(moments, conf.level = .95, mu = 0, ...) 
   results <- cbind(Est, SE, df, LL, UL)
   rownames(results) <- "Comparison"
   comment(results) <- "Confidence Interval for the Mean Difference"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 
@@ -180,7 +180,7 @@ standardizeMeansDifference.wsm <- function(moments, corrs, conf.level = .95, lab
     rownames(results) <- labels
   }
   comment(results) <- "Confidence Interval for the Standardized Mean Difference"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 
@@ -205,7 +205,7 @@ standardizeMeansDifference.bsm <- function(moments, conf.level = .95, labels = N
     rownames(results) <- labels
   }
   comment(results) <- "Confidence Interval for the Standardized Mean Difference"
-  class(results) <- c("easi", "intervalsMain")
+  class(results) <- c("easi", "intervals")
   return(results)
 }
 
