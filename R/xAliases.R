@@ -64,3 +64,17 @@ testSubsets <- function(...) {
 plotSubsets <- function(...) {
   plotMeansSubsets(...)
 }
+
+### Means Complex
+
+estimateComplex <- function(...) {
+  estimateMeansComplex(...)
+}
+
+testComplex <- function(...) {
+  testMeansComplex(...)
+}
+
+plotComplex <- function(...) {
+  plotMeansComplex(...)
+}
