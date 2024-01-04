@@ -20,7 +20,7 @@ estimateMeansSubsets.wsm <- function(moments, corrs, contrast, conf.level = .95,
   }
   Diff <- estimateMeansContrast(moments, corrs, contrast = contrast, conf.level = conf.level)
   results <- rbind(Subsets, Diff)
-  comment(results) <- "Confidence Intervals for the Subsets of Means"
+  comment(results) <- "Confidence Intervals for the Mean Subsets"
   class(results) <- c("easi", "intervalsComp")
   return(results)
 }
@@ -38,7 +38,7 @@ estimateMeansSubsets.bsm <- function(moments, contrast, conf.level = .95, labels
   }
   Diff <- estimateMeansContrast(moments, contrast = contrast, conf.level = conf.level)
   results <- rbind(Subsets, Diff)
-  comment(results) <- "Confidence Intervals for the Subsets of Means"
+  comment(results) <- "Confidence Intervals for the Mean Subsets"
   class(results) <- c("easi", "intervalsComp")
   return(results)
 }
@@ -103,7 +103,7 @@ teestMeansSubsets.wsm <- function(moments, corrs, contrast, mu = 0, labels = NUL
   }
   Diff <- testMeansContrast(moments, corrs, contrast = contrast, mu = mu)
   results <- rbind(Subsets, Diff)
-  comment(results) <- "Hypothesis Tests for the Subsets of Means"
+  comment(results) <- "Hypothesis Tests for the Means Subsets"
   class(results) <- c("easi")
   return(results)
 }
@@ -121,7 +121,7 @@ testMeansSubsets.bsm <- function(moments, contrast, mu = 0, labels = NULL, ...) 
   }
   Diff <- estimateMeansContrast(moments, contrast = contrast, mu = mu)
   results <- rbind(Subsets, Diff)
-  comment(results) <- "Hypothesis Tests for the Subsets of Means"
+  comment(results) <- "Hypothesis Tests for the Means Subsets"
   class(results) <- c("easi")
   return(results)
 }

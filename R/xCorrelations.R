@@ -1,6 +1,33 @@
 # Estimation Approach to Statistical Inference
 ## Correlations
 
+### Describe
+
+.cortocov <- function(corrs, SD) {
+  sdsquare <- SD %*% t(SD)
+  covstats <- sdsquare * corrs
+  return(covstats)
+}
+
+describeCorrelations <- function(x, ...) {
+  UseMethod("describeCorrelations")
+}
+
+describeCorrelations.data.frame <- function(frame, ...) {
+  results <- cor(frame)
+  class(results) <- c("easi", "cor")
+  comment(results) <- "Correlations for the Data"
+  return(results)
+}
+
+describeCorrelations.cor <- function(cor, ...) {
+  return(cor)
+}
+
+describeCorrelations.wsm <- function(wsm, cor, ...) {
+  return(cor)
+}
+
 ### Estimate
 
 estimateCorrelations <- function(x, ...) {

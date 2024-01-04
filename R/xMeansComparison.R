@@ -11,7 +11,7 @@ estimateMeansComparison.bsm <- function(moments, conf.level = .95, mu = 0, ...) 
   Levels <- estimateMeansSet(moments, conf.level = conf.level, mu = 0, ...)
   Diff <- estimateMeansDifference(moments, conf.level = conf.level, mu = 0, ...)
   results <- rbind(Levels, Diff)
-  comment(results) <- "Confidence Intervals for the Comparison of Means"
+  comment(results) <- "Confidence Intervals for the Mean Comparison"
   class(results) <- c("easi", "intervalsComp")
   return(results)
 }
@@ -20,7 +20,7 @@ estimateMeansComparison.wsm <- function(moments, corrs, conf.level = .95, mu = 0
   Levels <- estimateMeansSet(moments, corrs, conf.level = conf.level, mu = 0, ...)
   Diff <- estimateMeansDifference(moments, corrs, conf.level = conf.level, mu = 0, ...)
   results <- rbind(Levels, Diff)
-  comment(results) <- "Confidence Intervals for the Comparison of Means"
+  comment(results) <- "Confidence Intervals for the Mean Comparison"
   class(results) <- c("easi", "intervalsComp")
   return(results)
 }
@@ -76,7 +76,7 @@ testMeansComparison.bsm <- function(moments, mu = 0, ...) {
   Levels <- testMeansSet(moments, mu = 0, ...)
   Diff <- testMeansDifference(moments, mu = 0, ...)
   results <- rbind(Levels, Diff)
-  comment(results) <- "Hypothesis Tests for the Comparison of Means"
+  comment(results) <- "Hypothesis Tests for the Mean Comparison"
   class(results) <- c("easi")
   return(results)
 }
@@ -85,7 +85,7 @@ testMeansComparison.wsm <- function(moments, corrs, mu = 0, ...) {
   Levels <- testMeansSet(moments, corrs, mu = 0, ...)
   Diff <- testMeansDifference(moments, corrs, mu = 0, ...)
   results <- rbind(Levels, Diff)
-  comment(results) <- "Hypothesis Tests for the Comparison of Means"
+  comment(results) <- "Hypothesis Tests for the Mean Comparison"
   class(results) <- c("easi")
   return(results)
 }

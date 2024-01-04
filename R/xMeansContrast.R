@@ -21,7 +21,7 @@ estimateMeansContrast.wsm <- function(moments, corrs, contrast, conf.level = .95
   results <- cbind(t(c(Est, SE, df, LL, UL)))
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
-  comment(results) <- "Confidence Interval for the Contrast of Means"
+  comment(results) <- "Confidence Interval for the Mean Contrast"
   class(results) <- c("easi", "intervalsMain")
   return(results)
 }
@@ -40,7 +40,7 @@ estimateMeansContrast.bsm <- function(moments, contrast, conf.level = .95, ...) 
   results <- cbind(t(c(Est, SE, df, LL, UL)))
   colnames(results) <- c("Est", "SE", "df", "LL", "UL")
   rownames(results) <- c("Contrast")
-  comment(results) <- "Confidence Interval for the Contrast of Means"
+  comment(results) <- "Confidence Interval for the Mean Contrast"
   class(results) <- c("easi", "intervalsMain")
   return(results)
 }
@@ -109,7 +109,7 @@ testMeansContrast.bsm <- function(moments, contrast, mu = 0, labels = NULL, ...)
   } else {
     rownames(results) <- labels
   }
-  comment(results) <- "Hypothesis Test for the Contrast of Means"
+  comment(results) <- "Hypothesis Test for the Mean Contrast"
   class(results) <- c("easi")
   return(results)
 }
@@ -131,7 +131,7 @@ testMeansContrast.wsm <- function(moments, corrs, contrast, mu = 0, labels = NUL
   } else {
     rownames(results) <- labels
   }
-  comment(results) <- "Hypothesis Test for the Contrast of Means"
+  comment(results) <- "Hypothesis Test for the Mean Contrast"
   class(results) <- c("easi")
   return(results)
 }
@@ -178,7 +178,7 @@ standardizeMeansContrast.wsm <- function(moments, corrs, contrast, conf.level = 
   } else {
     rownames(results) <- labels
   }
-  comment(results) <- "Confidence Interval for the Standardized Contrast of Means"
+  comment(results) <- "Confidence Interval for the Standardized Mean Contrast"
   class(results) <- c("easi", "intervalsMain")
   return(results)
 }
@@ -205,7 +205,7 @@ standardizeMeansContrast.bsm <- function(moments, contrast, conf.level = .95, la
   } else {
     rownames(results) <- labels
   }
-  comment(results) <- "Confidence Interval for the Standardized Contrast of Means"
+  comment(results) <- "Confidence Interval for the Standardized Mean Contrast"
   class(results) <- c("easi", "intervalsMain")
   return(results)
 }

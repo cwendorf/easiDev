@@ -1,7 +1,7 @@
 # Estimation Approach to Statistical Inference
-## Describe
+## Moments
 
-### Moments
+### Describe
 
 .skewness <- function(x, na.rm = FALSE, type = 2) {
   if (any(ina <- is.na(x))) {
@@ -86,61 +86,5 @@ describeMoments.formula <- function(formula, ...) {
   colnames(results) <- c("N", "M", "SD", "Skew", "Kurt")
   class(results) <- c("easi", "bsm")
   comment(results) <- "Statistics for the Data"
-  return(results)
-}
-
-### Correlations
-
-.cortocov <- function(corrs, SD) {
-  sdsquare <- SD %*% t(SD)
-  covstats <- sdsquare * corrs
-  return(covstats)
-}
-
-describeCorrelations <- function(x, ...) {
-  UseMethod("describeCorrelations")
-}
-
-describeCorrelations.data.frame <- function(frame, ...) {
-  results <- cor(frame)
-  class(results) <- c("easi", "cor")
-  comment(results) <- "Correlations for the Data"
-  return(results)
-}
-
-describeCorrelations.cor <- function(cor, ...) {
-  return(cor)
-}
-
-describeCorrelations.wsm <- function(wsm, cor, ...) {
-  return(cor)
-}
-
-### Percentiles
-
-describePercentiles <- function(x, ...) {
-  UseMethod("describePercentiles")
-}
-
-describePercentiles.data.frame <- function(frame, ...) {
-  data <- data.frame(frame)
-  if (ncol(data) == 1) {
-    colnames(data) <- deparse(substitute(frame))
-  }
-  results <- t(sapply(data, quantile))
-  colnames(results) <- c("Min", "25%", "50%", "75%", "Max")
-  class(results) <- "easi"
-  comment(results) <- "Percentiles for the Data"
-  return(results)
-}
-
-describePercentiles.formula <- function(formula, ...) {
-  results <- aggregate(formula, FUN = describePercentiles.data.frame)
-  rn <- results[, 1]
-  results <- results[[2]]
-  rownames(results) <- rn
-  colnames(results) <- c("Min", "25%", "50%", "75%", "Max")
-  class(results) <- "easi"
-  comment(results) <- "Percentiles for the data"
   return(results)
 }
