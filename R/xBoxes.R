@@ -29,7 +29,7 @@ describeBoxes.formula <- function(formula, ...) {
 
 ### Plot
 
-.boxes <- function(results, main, ylab, xlab, ylim, values, digits, pos, connect, add, col, offset, scale, ...) {
+plot.boxes <- function(results, main, ylab, xlab, ylim, values, digits, pos, connect, add, col, offset, scale, ...) {
   if (is.null(main)) main <- comment(results)
   results <- unclass(results)
   if (!add) {
@@ -68,13 +68,13 @@ plotBoxes <- function(x, ...) {
 
 plotBoxes.data.frame <- function(frame, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, offset = 0, scale = 1, col = "black", values = TRUE, digits = 3, pos = 2) {
   results <- describeBoxes(frame, main = main, digits = digits)
-  .boxes(results, main = main, ylab = ylab, xlab = xlab, ylim = ylim, values = values, digits = digits, pos = pos, connect = FALSE, add = add, col = col, offset = offset, scale = scale)
+  plot.boxes(results, main = main, ylab = ylab, xlab = xlab, ylim = ylim, values = values, digits = digits, pos = pos, connect = FALSE, add = add, col = col, offset = offset, scale = scale)
   invisible(eval(frame))
 }
 
 plotBoxes.formula <- function(formula, add = FALSE, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, offset = 0, scale = 1, col = "black", values = TRUE, digits = 3, pos = 2) {
   results <- describeBoxes(formula, main = main, digits = digits)
-  .boxes(results, main = main, ylab = ylab, xlab = xlab, ylim = ylim, values = values, digits = digits, pos = pos, connect = FALSE, add = add, col = col, offset = offset, scale = scale)
+  plot.boxes(results, main = main, ylab = ylab, xlab = xlab, ylim = ylim, values = values, digits = digits, pos = pos, connect = FALSE, add = add, col = col, offset = offset, scale = scale)
   invisible(eval(formula))
 }
 
