@@ -30,7 +30,7 @@ plot.main <- function(results, main = NULL, ylab = "Outcome", xlab = "", ylim = 
   axis(1, seq_len(nrow(results)), row.names(results))
 }
 
-.plotComp <- function(results, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = "Difference", ...) {
+plot.comp <- function(results, main = NULL, ylab = "Outcome", xlab = "", ylim = NULL, slab = "Difference", ...) {
   if (is.null(main)) main <- comment(results)
   main <- paste(strwrap(main, width = 0.7 * getOption("width")), collapse = "\n")
   graph <- results
@@ -89,7 +89,7 @@ plot.intervals.comp <- function(results, add = FALSE, main = NULL, ylab = "Outco
   if (is.null(main)) main <- comment(results)
   results <- results[, c(1, 4, 5)]
   comment(results) <- main
-  if (!add) .plotComp(results, main, ylab, xlab, ylim, slab)
+  if (!add) plot.comp(results, main, ylab, xlab, ylim, slab)
   graph <- results
   graph[3, ] <- results[3, ] + results[1, 1]
   if (points) points(1:3 + offset, graph[, 1], pch = pch, cex = 1.5, col = col, lwd = 2, bg = .colorIntensity(col, .6))
