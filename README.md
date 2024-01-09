@@ -7,7 +7,7 @@
 
 ### Overview
 
-**easiDev** is an R package that implements features of estimation statistics. It is the developmental version of [**EASI**](https://github.com/cwendorf/EASI/) and lacks certain features (while providing others). It is a proof of concept for future versions of EASI.
+**easiDev** is an R package that implements features of estimation statistics. It is the developmental version of [**EASI**](https://github.com/cwendorf/EASI/) and lacks certain features (while providing others). As such, it is both a lite version and a proof of concept for future versions of EASI.
 
 ### Installation
 
