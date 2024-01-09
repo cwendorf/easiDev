@@ -41,8 +41,8 @@ Outcome3 <- c(9, 16, 11, 12, 15, 13, 9, 14, 11, 10)
 RepeatedData <- construct(Outcome1, Outcome2, Outcome3)
 ```
 
+Straight from data
 Extra titles don't work
-Connecting lines don't work
 ```{r}
 (RepeatedData)
 (RepeatedData) |> describeMoments()
@@ -50,7 +50,7 @@ Connecting lines don't work
 (RepeatedData) |> describeCorrelations()
 (RepeatedData) |> describeCorrelations() |> print(digits=1)
 
-(RepeatedData) |> estimateMeans()
+(RepeatedData) |> estimateMeans(conf.level=.99,mu=3)
 (RepeatedData) |> plotMeans()
 
 (RepeatedData) |> focus(Outcome1, Outcome2) |> estimateMeans() |> print(digits=6,main="cool")
@@ -59,14 +59,16 @@ Connecting lines don't work
 
 (RepeatedData) |> estimateMeans(contrast = c(-1, .5, .5), conf.level=.99)
 (RepeatedData) |> estimateMeans(contrast = c(-1, .5, .5)) |> plot()
+(RepeatedData) |> plotMeans(contrast = c(-1, .5, .5),digits=6,main="cool")
 
 ```
 
+Straight from data
 ```{R}
 (RepeatedData) |> describeCorrelations() |> print(digits=6)
 (RepeatedData) |> estimateCorrelations()
 
-(RepeatedData) |> estimateCorrelations() |> print(digits=6, width=10, main = "cools")
+(RepeatedData) |> estimateCorrelations() |> print(digits=6, width=15, main = "cools")
 (RepeatedData) |> estimateCorrelations() |> plot()
 
 ```
@@ -88,11 +90,13 @@ Outcome3 <- c(.385, .574, 1.000)
 RepeatedCorr <- construct(Outcome1, Outcome2, Outcome3, class = "cor")
 ```
 
+Straight from summaries
 ```{r}
-(RepeatedSummary) |> print(digits=6,width=11)
+(RepeatedSummary) |> print(digits=6,width=15)
 (RepeatedCorr) |> print(digits=5)
 
 (RepeatedSummary) |> describeMoments() |> print(digits=5)
+
 (RepeatedSummary) |> estimateMeans() |> print(digits=8,width=12)
 (RepeatedSummary) |> estimateMeans() |> plot(digits=8,width=12)
 
@@ -105,6 +109,7 @@ RepeatedCorr <- construct(Outcome1, Outcome2, Outcome3, class = "cor")
 
 ```
 
+Create summaries first
 ```{r}
 (RepeatedSummary) |> describeMoments() |> estimateMeans()
 (RepeatedSummary) |> describeMoments() |> estimateMeans() |> plot()

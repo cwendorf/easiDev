@@ -42,28 +42,52 @@ Outcome <- c(6, 8, 6, 8, 10, 8, 10, 9, 8, 7, 7, 13, 11, 10, 13, 8, 11, 14, 12, 1
 OneWayData <- construct(Factor, Outcome)
 ```
 
+Straight from data
 ```{r}
 (Outcome~Factor) |> describeMoments()
 
 (Outcome~Factor) |> focus(Level1, Level2, Level3) |> estimateMeans()
 (Outcome~Factor) |> focus(Level1, Level2, Level3) |> plotMeans()
 (Outcome~Factor) |> focus(Level1, Level2) |> estimateMeans() |> plot()
+```
+
+```{r}
+(Outcome~Factor) |> focus(Level1, Level2) |> estimateMeansSet()
+(Outcome~Factor) |> focus(Level1, Level2) |> plotMeansSet()
+(Outcome~Factor) |> focus(Level1) |> estimateMeansSet()
+(Outcome~Factor) |> focus(Level1) |> plotMeansSet()
+```
+
+```{r}
+(Outcome~Factor) |> focus(Level1, Level2) |> plotMeansDifference()
+(Outcome~Factor) |> focus(Level1, Level2) |> plotMeansComparison()
+
 (Outcome~Factor) |> estimateMeans(contrast=c(-1, .5, .5))
 (Outcome~Factor) |> estimateMeans(contrast=c(-1, .5, .5),labels=c("neg","pos")) |> plot(main="Cool",digits=1,xlab="time")
 (Outcome~Factor) |> plotMeans(contrast=c(-1, .5, .5),labels=c("neg","pos"))
 
 ```
 
+Create summaries first
 ```{r}
 
 (Outcome~Factor) |> describeMoments()
 (Outcome~Factor) |> describeMoments() |> estimateMeans(conf.level=.99)
-(Outcome~Factor) |> describeMoments() |> plotMeans(conf.level=.99, line=9, rope=c(8,10))
+(Outcome~Factor) |> describeMoments() |> plotMeansSet(conf.level=.99, line=9, rope=c(8,10))
 
-(Outcome~Factor) |> describeMoments() |> focus(Level1, Level2) |> estimateMeans() |> plotIntervals()
+(Outcome~Factor) |> describeMoments() |> focus(Level1, Level2) |> estimateMeans() |> plot()
+
+
 (Outcome~Factor) |> describeMoments() |> estimateMeans(contrast=c(-1, .5, .5))
 (Outcome~Factor) |> describeMoments() |> estimateMeans(contrast=c(-1, .5, .5),labels=c("neg","pos")) |> plot(main="Cool",digits=1,xlab="time")
 (Outcome~Factor) |> describeMoments() |> plotMeans(contrast=c(-1, .5, .5), rope=c(-2,2))
+```
+
+
+```{r}
+(Outcome~Factor) |> describePercentiles()
+(Outcome~Factor) |> describeBoxes()
+(Outcome~Factor) |> plotBoxes()
 
 ```
 
@@ -77,16 +101,18 @@ Level3 <- c(N = 10, M = 12.000, SD = 2.449)
 OneWaySummary <- construct(Level1, Level2, Level3, class = "bsm")
 ```
 
+Using only summaries
+mu doesn't work for comparisons
 ```{r}
 (OneWaySummary)
 (OneWaySummary) |> print(digits=4,width=12)
 
-(OneWaySummary) |> estimateMeansSet()
+(OneWaySummary) |> testMeans()
 (OneWaySummary) |> plotMeans(line=9,main="title",values=FALSE)
-(OneWaySummary) |> focus(Level1, Level2) |> estimateMeans(conf.level=.99, mu =3)
+(OneWaySummary) |> focus(Level1, Level2) |> testMeansComparison(conf.level=.99, mu =0)
 (OneWaySummary) |> focus(Level1, Level2) |> estimateMeans() |> plot(main="title")
 
-(OneWaySummary) |> estimateMeans(contrast=c(-1, .5, .5))
+(OneWaySummary) |> testMeansSubsets(contrast=c(-1, .5, .5),mu=3)
 (OneWaySummary) |> plotMeans(contrast=c(-1, .5, .5),digits=6)
 (OneWaySummary) |> estimateMeans(contrast=c(-1, .5, .5)) |> plot(main="title",digits=6)
 

@@ -1,21 +1,3 @@
----
-title: "Factorial Alternative Data Example"
-description: >
-  This page examines a two-factor between-subjects (factorial) design using raw data input, focusing on comparisons and contrasts.
-output: rmarkdown::html_vignette
----
-
-```{r,include=FALSE}
-if (!require(easiDev)) {
-  if (!require(remotes)) install.packages("remotes")
-  remotes::install_github("cwendorf/easiDev")
-}
-library(easiDev)
-```
-
-```{r, include=FALSE}
-knitr::opts_chunk$set(fig.width = 7, fig.height = 7, comment = NA)
-```
 
 ## Factorial Vignette
 
@@ -24,14 +6,6 @@ This vignette analyzes data from a two-factor between-subjects design.
 ```{r}
 source("http://raw.githubusercontent.com/cwendorf/easiDev/main/source-easiDev.R")
 ```
-
-```{r,include=FALSE}
-devtools::source_gist("8e6e5dc401e3fc1042ef7a030f9d19c7", filename = "revised_toc.R")
-thisfile <- knitr::current_input()
-revised_toc(thisfile, base_level = 3, toc_depth = 4)
-```
-
----
 
 ### Data Management
 
@@ -103,54 +77,54 @@ FactorialData <- construct(FactorA, FactorB, Outcome)
 ```
 
 ```{r}
-### Split Data
 
-splitData <- function(x, ...) {
-  UseMethod("splitData")
-}
+FactorialData |> splitData(FactorB) -> SplitFactorial
+SplitFactorial
 
-splitData.data.frame <- function(frame, by, ...) {
-  MixedData <- data.frame(by, data)
-  SplitData <- split(MixedData[-1], by)
-  return(SplitData)
-}
+```
 
-splitData.formula <- function(formula, by, ...) {
+
+```{r}
+dmb.formula <- function(formula, by, ...) {
   Group <- eval(formula[[3]])
   Outcome <- eval(formula[[2]])
   FactorialData <- data.frame(by, Group, Outcome)
-  SplitData <- split(FactorialData[-1], by)
-  return(SplitData)
+  SplitData <- split(FactorialData, by)
+  results <- lapply(SplitData, function(x) describeMoments(Outcome ~ Group))
+  results
+}
+
+
+dmb.formula <- function(formula, by, ...) {
+  SplitData <- split(FactorialData, by)
+  results <- lapply(SplitData, function(x) describeMoments(formula))
+  results
+}
+
+
+```
+
+
+```{r}
+# This works
+estimateMeansSet.list <- function(splitframe, formula, ...) {
+  temp <- lapply(splitframe, function(x) describeMoments(formula))
+  estimateMeansSet.bsl(temp)
 }
 
 ```
 
 ```{r}
-(FactorialData) |> focus(Outcome~FactorA) |> splitData(FactorB) -> SplitFactorial
-class(SplitFactorial) -> "split.frame"
-SplitFactorial
+# This works
+(Outcome~FactorA) |> splitData(FactorB)
 
+(Outcome~FactorA) |> dmb.formula(FactorB)
 
-lapply(test.list, FUN=function(x) perm.test(formula=(cover ~ group),data=x)) 
-SplitFactorial |> lapply(FUN=function(x) describeMoments(formula=(Outcome~FactorA)))
-
-SplitFactorial |> lapply(function(x) describeMoments(Outcome~FactorA))
-
-SplitFactorial |> lapply(function(x) (Outcome~FactorA) |> describeMoments())
-SplitFactorial |> lapply(\(x) (Outcome~FactorA) |> describeMoments())
+ (Outcome~FactorA) |> dmb.formula(FactorB) |> estimateMeansSet()
 
 ```
 
 ### Factorial Summary
-
-```{r}
-
-combine <- function(..., class = NULL) {
-  output <- list(...)
-  class(output) <- class
-  return(output)
-}
-```
 
 ```{r}
 A1 <- c(N = 10, M = 8.000, SD = 1.414)
@@ -161,14 +135,44 @@ A1 <- c(N = 10, M = 8.000, SD = 2.449)
 A2 <- c(N = 10, M = 8.000, SD = 2.000)
 A3 <- c(N = 10, M = 7.000, SD = 2.211)
 FactorialSummaryB2 <- construct(A1, A2, A3, class = "bsm")
-FactorialSummary <- combine(B1 = FactorialSummaryB1, B2 = FactorialSummaryB2, class = "bsl")
+FactorialSummary <- combine(B1 = FactorialSummaryB1, B2 = FactorialSummaryB2)
 ```
 
 ```{r}
-estimateMeansSet.bsl <- function(list, ...) {
+estimateMeansSet.list <- function(list, ...) {
   lapply(list, estimateMeansSet, ...)
 }
 
-estimateSet(FactorialSummary)
+# This works
+estimateMeansSet(FactorialSummary)
+(FactorialSummary) |> estimateMeansSet(conf.level=.99)
+
+```
+
+
+```{r}
+
+focus.list <- function(moments, ...) {
+  chosen <- as.character(match.call(expand.dots = FALSE)$...)
+  for (i in seq_along(moments)) {
+    newclass <- class(moments[[i]])
+    moments[[i]] <- moments[[i]][chosen, ]
+    class(moments[[i]]) <- newclass
+    }
+  return(moments)
+}
+
+focus.bsm <- focus.wsm <- function(moments, ...) {
+  chosen <- as.character(match.call(expand.dots = FALSE)$...)
+  results <- moments[chosen, , drop = FALSE]
+  class(results) <- class(moments)
+  return(results)
+}
+
+```
+
+```{r}
+# This works
+FactorialSummary |> focus(A1,A2) |> estimateMeansSet()
 
 ```
