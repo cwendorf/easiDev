@@ -89,6 +89,11 @@ describeMoments.formula <- function(formula, ...) {
   return(results)
 }
 
+describeMoments.list <- function(list, ...) {
+  results <- lapply(list, describeMoments, ...)
+  return(results)
+}
+
 ### Plot
 
 .deviations <- function(results, main, ylab, xlab, ylim, values, digits, pos, pch, add, col, offset) {
