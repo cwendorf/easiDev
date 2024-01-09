@@ -22,6 +22,26 @@ print.easi <- function(x, ...) {
   invisible(x)
 }
 
+### Split Data
+
+splitData <- function(x, ...) {
+  UseMethod("splitData")
+}
+
+splitData.data.frame <- function(frame, by, ...) {
+  dropped <- deparse(substitute(by))
+  results <- split(subset(frame, select = -match(dropped, names(frame))), by)
+  return(results)
+}
+
+splitData.formula <- function(formula, by, ...) {
+  FactorialData <- data.frame(by, eval(formula[[3]]), eval(formula[[2]]))
+  temp <- all.vars(formula)
+  names(FactorialData) <- c("by", temp[2], temp[1])
+  SplitData <- split(FactorialData[-1], by)
+  return(SplitData)
+}
+
 ### Construction
 
 construct <- function(..., class = "data") {
@@ -38,6 +58,12 @@ construct <- function(..., class = "data") {
     class(results) <- c(class, "easi")
     comment(results) <- "Correlations for the Data"
   }
+  return(results)
+}
+
+combine <- function(..., class = NULL) {
+  results <- list(...)
+  class(results) <- class
   return(results)
 }
 
@@ -58,7 +84,7 @@ focus.bsm <- focus.wsm <- function(moments, ...) {
     return(moments)
   }
   else {
-    results <- moments[chosen, ,drop = FALSE]
+    results <- moments[chosen, , drop = FALSE]
     class(results) <- class(moments)
     return(results)
   }
