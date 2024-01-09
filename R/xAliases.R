@@ -78,3 +78,17 @@ testComplex <- function(...) {
 plotComplex <- function(...) {
   plotMeansComplex(...)
 }
+
+### Means Interaction
+
+estimateInteraction <- function(...) {
+  estimateMeansInteraction(...)
+}
+
+testInteraction <- function(...) {
+  testMeansInteraction(...)
+}
+
+plotInteraction <- function(...) {
+  plotMeansInteraction(...)
+}

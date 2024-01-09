@@ -63,7 +63,7 @@ construct <- function(..., class = "data") {
 
 combine <- function(..., class = NULL) {
   results <- list(...)
-  class(results) <- class
+  class(results) <- c(class, "list", "easi")
   return(results)
 }
 
@@ -73,21 +73,8 @@ focus <- function(x, ...) {
   UseMethod("focus")
 }
 
-focus.bsm <- focus.wsm <- function(moments, ...) {
-  chosen <- as.character(match.call(expand.dots = FALSE)$...)
-  if (typeof(moments) == "list") {
-    for (i in seq_along(moments)) {
-      newclass <- class(moments[[i]])
-      moments[[i]] <- moments[[i]][chosen, ]
-      class(moments[[i]]) <- newclass
-    }
-    return(moments)
-  }
-  else {
-    results <- moments[chosen, , drop = FALSE]
-    class(results) <- class(moments)
-    return(results)
-  }
+focus.default <- function(...) {
+  data.frame(...)
 }
 
 focus.data.frame <- function(frame, ...) {
@@ -110,24 +97,37 @@ focus.data.frame <- function(frame, ...) {
 }
 
 focus.formula <- function(formula, ...) {
-  chosen <- as.character(match.call(expand.dots = FALSE)$...)
-  update <- paste("~ factor(.,", paste(deparse(chosen), collapse = ","), ")")
+  chosen <- (match.call(expand.dots = FALSE)$...)
+  if (is.null(chosen)) update <- formula
+  else {
+    chosen <- as.character(chosen)
+    update <- paste("~ factor(.,", paste(deparse(chosen), collapse = ","), ")")}
   update(formula, update)
+}
+
+focus.bsm <- focus.wsm <- function(moments, ...) {
+  chosen <- as.character(match.call(expand.dots = FALSE)$...)
+  results <- moments[chosen, , drop = FALSE]
+  class(results) <- class(moments)
+  return(results)
 }
 
 focus.cor <- function(corrs, ...) {
   chosen <- as.character(match.call(expand.dots = FALSE)$...)
-  if (typeof(corrs) == "list") {
-    for (i in seq_along(corrs)) {
-      newclass <- class(corrs[[i]])
-      corrs[[i]] <- corrs[[i]][chosen, chosen]
-      class(corrs[[i]]) <- newclass
+  results <- corrs[chosen, chosen]
+  class(results) <- class(corrs)
+  return(results)
+}
+
+focus.bsl <- focus.wsl <- focus.list <- function(list, ...) {
+  chosen <- as.character(match.call(expand.dots = FALSE)$...)
+  for (i in seq_along(list)) {
+    newclass <- class(list[[i]])
+    newcomment <- comment(list[[i]])
+    if (class(list[[i]][1]) == "cor") (list[[i]] <- list[[i]][chosen, chosen])
+    else (list[[i]] <- list[[i]][chosen, ])
+    class(list[[i]]) <- newclass
+    comment(list[[i]]) <- newcomment
     }
-    return(corrs)
-  }
-  else {
-    results <- corrs[chosen, chosen]
-    class(results) <- class(corrs)
-    return(results)
-  }
+  return(list)
 }

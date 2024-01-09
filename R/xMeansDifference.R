@@ -107,11 +107,7 @@ testMeansDifference.wsm <- function(moments, corrs, mu = 0, labels = NULL, ...) 
   t <- MD / SE
   p <- 2 * (1 - pt(abs(t), df))
   results <- cbind(Diff = MD, SE = SE, df = df, t = t, p = p)
-  if (is.null(labels)) {
-    rownames(results) <- c(intervals.comparison)
-  } else {
-    rownames(results) <- labels
-  }
+  rownames(results) <- "Comparison"
   comment(results) <- "Hypothesis Test for the Mean Difference"
   class(results) <- c("easi")
   return(results)
@@ -128,11 +124,7 @@ testMeansDifference.bsm <- function(moments, mu = 0, labels = NULL, ...) {
   t <- MD / SE
   p <- 2 * (1 - pt(abs(t), df))
   results <- cbind(Diff = MD, SE = SE, df = df, t = t, p = p)
-  if (is.null(labels)) {
-    rownames(results) <- c("Difference")
-  } else {
-    rownames(results) <- labels
-  }
+  rownames(results) <- "Comparison"
   comment(results) <- "Hypothesis Test for the Mean Difference"
   class(results) <- c("easi")
   return(results)
@@ -174,11 +166,7 @@ standardizeMeansDifference.wsm <- function(moments, corrs, conf.level = .95, lab
   UL <- Est + z * SE
   results <- cbind(t(c(Est, SE, LL, UL)))
   colnames(results) <- c("d", "SE", "LL", "UL")
-  if (is.null(labels)) {
-    rownames(results) <- c(intervals.comparison)
-  } else {
-    rownames(results) <- labels
-  }
+  rownames(results) <- "Comparison"
   comment(results) <- "Confidence Interval for the Standardized Mean Difference"
   class(results) <- c("easi", "intervals.main")
   return(results)
@@ -199,11 +187,7 @@ standardizeMeansDifference.bsm <- function(moments, conf.level = .95, labels = N
   UL <- Est + z * SE
   results <- cbind(t(c(Est, SE, LL, UL)))
   colnames(results) <- c("d", "SE", "LL", "UL")
-  if (is.null(labels)) {
-    rownames(results) <- c(intervals.comparison)
-  } else {
-    rownames(results) <- labels
-  }
+  rownames(results) <- "Comparison"
   comment(results) <- "Confidence Interval for the Standardized Mean Difference"
   class(results) <- c("easi", "intervals.main")
   return(results)
